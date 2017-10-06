@@ -1,0 +1,13 @@
+.idea/
+out/
+PartA/*.iml
+PartA/*.xml
+PartA/*.classpath
+PartA/*.class
+PartB/*.iml
+PartB/*.xml
+PartB/*.classpath
+PartB/*.class
+*.classpath
+*.iml
+*.xml
