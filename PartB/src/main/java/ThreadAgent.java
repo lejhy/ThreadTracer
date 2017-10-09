@@ -1,9 +1,5 @@
-package BackEnd;
-
 import BackEnd.ThreadTracer;
-
 import java.lang.instrument.Instrumentation;
-import java.util.jar.Manifest;
 
 public class ThreadAgent {
 
@@ -20,15 +16,21 @@ public class ThreadAgent {
 
     public static void premain(String agentArgument, Instrumentation instrumentation) {
         System.out.println("Agent");
-        while (true) {
-            System.out.println("\n\n\n\t>>>>");
-            ThreadTracer tt = new ThreadTracer();
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                System.exit(1);
-            }
-        }
-
+        Thread monitor = new Thread() {
+        	@Override
+        	public void run() {
+        		 while (true) {
+    	            System.out.println("\n\n\n\t>>>>");
+    	            ThreadTracer tt = new ThreadTracer();
+    	            try {
+    	                Thread.sleep(1000);
+    	            } catch (InterruptedException e) {
+    	            	// Do nothing, shit happens
+    	                e.printStackTrace();
+    	            }
+    	        }
+        	}
+        };
+        monitor.start();
     }
 }
