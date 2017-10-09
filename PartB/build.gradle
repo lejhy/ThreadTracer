@@ -10,6 +10,20 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
+// Create the jar file with manifest file
+jar {
+    archiveName = "${rootProject.name}.jar"
+    manifest {
+        attributes(
+                'Premain-Class': 'ThreadAgent',
+                'Can-Redefine-Classes': 'true',
+                'Can-Retransform-Classes': 'true',
+                'Can-Set-Native-Method-Prefix': 'true',
+                'Implementation-Title': 'ThreadAgent',
+        )
+    }
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
