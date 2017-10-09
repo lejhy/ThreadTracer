@@ -28,33 +28,18 @@ public class ThreadTracer {
             System.out.println(current.getId() + ":" + current.getName() + " [" + current.getThreadGroup().getName() + "]");
     }
 
-    private List<Thread> getThreads(ThreadGroup x) {
+    private List<Thread> getThreads(ThreadGroup threadGroup) {
         List<Thread> threads = new ArrayList<Thread>();
-        ThreadGroup root = x;
-        while (root.getParent() != null) {
-            root = root.getParent();
+        ThreadGroup rootGroup = threadGroup;
+        while (rootGroup.getParent() != null) {
+            rootGroup = rootGroup.getParent();
         }
-        List<ThreadGroup> que = new ArrayList<ThreadGroup>();
-        que.add(root);
+        Thread[] threadArray = new Thread[rootGroup.activeCount()];
 
-        while (que.size() > 0) {
-            ThreadGroup selected = que.remove(0);
-            ThreadGroup[] childen = new ThreadGroup[selected.activeCount()];
-            selected.enumerate(childen);
-            Thread[] childenThreads = new Thread[selected.activeCount()];
-            selected.enumerate(childenThreads);
-
-            for (ThreadGroup current : childen) {
-                if (current != null)
-                    que.add(current);
-            }
-            for (Thread current : childenThreads) {
-                if (!threads.contains(current))
-                    threads.add(current);
-            }
+        rootGroup.enumerate(threadArray);
+        for (Thread thread : threadArray) {
+        	threads.add(thread);
         }
         return threads;
     }
-
-
 }
