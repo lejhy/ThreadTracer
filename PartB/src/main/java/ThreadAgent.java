@@ -1,12 +1,11 @@
 import BackEnd.ThreadTracer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 public class ThreadAgent extends Application {
@@ -63,18 +62,21 @@ public class ThreadAgent extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// Basic UI just for testing
-		String message = "Hello World!";
-		Button btnHello = new Button("Exit");
-		btnHello.setOnAction((event) -> {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("ThreadAgent.fxml"));
+			Scene scene = new Scene(loader.load());
+			scene.getStylesheets().add(getClass().getResource("ThreadAgent.css").toString());
+			primaryStage.setScene(scene);
+		} catch (IOException e) {
+			System.out.println("Error loading fxml file");
+			System.err.println();
 			Platform.exit();
-		});
-		StackPane root = new StackPane();
-		root.getChildren().add(btnHello);
-        Scene scene = new Scene(root, 300, 250);
-        primaryStage.setTitle(message);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+		}
+		
+		primaryStage.setResizable(true);
+		primaryStage.setTitle("ThreadAgent");
+		primaryStage.show();
         
         //Our monitor thread printing into console
         Thread monitor = new Thread() {
