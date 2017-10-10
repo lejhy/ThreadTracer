@@ -80,25 +80,6 @@ public class ThreadAgent extends Application {
 		primaryStage.setResizable(true);
 		primaryStage.setTitle("ThreadAgent");
 		primaryStage.show();
-        
-        //Our monitor thread printing into console
-        Thread monitor = new Thread() {
-        	@Override
-        	public void run() {
-        		while (true) {
-        		    System.out.println("\n\n\n\t>>>>");
-        			ThreadTracer tt = new ThreadTracer();
-        			try {
-        			    Thread.sleep(1000);
-        			} catch (InterruptedException e) {
-        				break;
-        			}
-                }
-        	}
-        };
-        //Set Daemon to true so that the thread terminates when no other user threads are active
-        monitor.setDaemon(true);
-        monitor.start();
 	}
 }
 
