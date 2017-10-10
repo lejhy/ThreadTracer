@@ -1,16 +1,15 @@
-package main.java.BackEnd;
+package BackEnd;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class ThreadTracer {
 
     private List<Thread> threads;
     public ThreadTracer() {
         threads = getThreads(Thread.currentThread().getThreadGroup());
-        filtration f = new filtration();
+        Filtration f = new Filtration();
         displayThreads(threads);
         System.out.println("\n\nFilter\n");
         displayThreads(f.applyfilter(threads, f.FILTER_DEAMONS));

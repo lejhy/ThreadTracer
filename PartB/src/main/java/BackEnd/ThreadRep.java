@@ -1,12 +1,12 @@
-package main.java.BackEnd;
+package BackEnd;
 
-public class threadRep {
+public class ThreadRep {
     String name;
     long PID;
     String state;
     int priority;
     boolean daemon;
-    public threadRep(Thread tread){
+    public ThreadRep(Thread tread){
         name = tread.getName();
         PID = tread.getId();
         state = tread.getState().name();
