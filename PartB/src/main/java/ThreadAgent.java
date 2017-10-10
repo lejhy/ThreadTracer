@@ -1,4 +1,6 @@
-import BackEnd.ThreadTracer;
+package main.java;
+
+import main.java.BackEnd.ThreadTracer;
 import java.lang.instrument.Instrumentation;
 
 public class ThreadAgent {

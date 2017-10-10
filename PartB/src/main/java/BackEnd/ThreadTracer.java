@@ -1,13 +1,19 @@
-package BackEnd;
+package main.java.BackEnd;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class ThreadTracer {
 
+    private List<Thread> threads;
     public ThreadTracer() {
-        displayThreads(getThreads(Thread.currentThread().getThreadGroup()));
+        threads = getThreads(Thread.currentThread().getThreadGroup());
+        filtration f = new filtration();
+        displayThreads(threads);
+        System.out.println("\n\nFilter\n");
+        displayThreads(f.applyfilter(threads, f.FILTER_DEAMONS));
     }
 
     /**
@@ -19,8 +25,6 @@ public class ThreadTracer {
      * }
      * }
      **/
-    public synchronized void locked() {
-    }
 
 
     private void displayThreads(List<Thread> td) {
@@ -28,18 +32,34 @@ public class ThreadTracer {
             System.out.println(current.getId() + ":" + current.getName() + " [" + current.getThreadGroup().getName() + "]");
     }
 
-    private List<Thread> getThreads(ThreadGroup threadGroup) {
+    public static List<Thread> getThreads(ThreadGroup x) {
         List<Thread> threads = new ArrayList<Thread>();
-        ThreadGroup rootGroup = threadGroup;
-        while (rootGroup.getParent() != null) {
-            rootGroup = rootGroup.getParent();
+        ThreadGroup root = x;
+        while (root.getParent() != null) {
+            root = root.getParent();
         }
-        Thread[] threadArray = new Thread[rootGroup.activeCount()];
+        List<ThreadGroup> que = new ArrayList<ThreadGroup>();
+        que.add(root);
 
-        rootGroup.enumerate(threadArray);
-        for (Thread thread : threadArray) {
-        	threads.add(thread);
+        while (que.size() > 0) {
+            ThreadGroup selected = que.remove(0);
+            ThreadGroup[] childen = new ThreadGroup[selected.activeCount()];
+            selected.enumerate(childen);
+            Thread[] childenThreads = new Thread[selected.activeCount()];
+            selected.enumerate(childenThreads);
+
+            for (ThreadGroup current : childen) {
+                if (current != null)
+                    que.add(current);
+            }
+            for (Thread current : childenThreads) {
+                if (!threads.contains(current))
+                    threads.add(current);
+            }
         }
         return threads;
     }
+
+
+
 }
