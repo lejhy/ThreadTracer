@@ -4,11 +4,17 @@ package BackEnd;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class ThreadTracer {
 
-    private List<Thread> threads;
+    private ObservableList<Thread> threads;
+    
     public ThreadTracer() {
-        threads = getThreads(Thread.currentThread().getThreadGroup());
+    	threads = FXCollections.observableArrayList();
+    	refreshThreads();
+    	startRefreshLoop();
         Filtration f = new Filtration();
         displayThreads(threads);
         System.out.println("\n\nFilter\n");
@@ -24,38 +30,43 @@ public class ThreadTracer {
      * }
      * }
      **/
-
+    
+    private void startRefreshLoop() {
+    	Thread t = new Thread(() -> {
+    		while(true) {
+	    		try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        	refreshThreads();
+    		}
+    	});
+    	t.setDaemon(true);
+    	t.start();
+    }
 
     private void displayThreads(List<Thread> td) {
         for (Thread current : td)
             System.out.println(current.getId() + ":" + current.getName() + " [" + current.getThreadGroup().getName() + "]");
     }
 
-    public static List<Thread> getThreads(ThreadGroup x) {
-        List<Thread> threads = new ArrayList<Thread>();
-        ThreadGroup root = x;
-        while (root.getParent() != null) {
-            root = root.getParent();
-        }
-        List<ThreadGroup> que = new ArrayList<ThreadGroup>();
-        que.add(root);
-
-        while (que.size() > 0) {
-            ThreadGroup selected = que.remove(0);
-            ThreadGroup[] childen = new ThreadGroup[selected.activeCount()];
-            selected.enumerate(childen);
-            Thread[] childenThreads = new Thread[selected.activeCount()];
-            selected.enumerate(childenThreads);
-
-            for (ThreadGroup current : childen) {
-                if (current != null)
-                    que.add(current);
-            }
-            for (Thread current : childenThreads) {
-                if (!threads.contains(current))
-                    threads.add(current);
-            }
-        }
+    public ObservableList<Thread> getThreads() {
         return threads;
+    }
+    
+    public void refreshThreads() {
+        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
+        while (rootGroup.getParent() != null) {
+            rootGroup = rootGroup.getParent();
+        }
+        Thread[] threadArray = new Thread[rootGroup.activeCount()];
+
+        rootGroup.enumerate(threadArray);
+        threads.clear();
+        for (Thread thread : threadArray) {
+        	threads.add(thread);
+        }
     }
 }

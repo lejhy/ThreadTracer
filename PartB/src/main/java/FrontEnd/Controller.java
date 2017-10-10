@@ -60,7 +60,6 @@ public class Controller {
     
     public void setThreadTracer(ThreadTracer threadTracer) {
     	this.threadTracer = threadTracer;
-    	List<Thread> threads = ThreadTracer.getThreads(Thread.currentThread().getThreadGroup());
-    	threadTable.setItems(FXCollections.observableArrayList(threads));
-    }
+    	threadTable.setItems(threadTracer.getThreads());
+    }    
 }

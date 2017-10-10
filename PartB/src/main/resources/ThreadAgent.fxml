@@ -4,9 +4,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="335.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.Controller">
+<AnchorPane prefHeight="1335.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.Controller">
    <children>
-      <TableView fx:id="threadTable" layoutY="4.0" prefHeight="335.0" prefWidth="670.0">
+      <TableView fx:id="threadTable" layoutY="4.0" prefHeight="1335.0" prefWidth="670.0">
         <columns>
           <TableColumn fx:id="name" minWidth="-1.0" prefWidth="-1.0" text="Name" />
           <TableColumn fx:id="pid" minWidth="-1.0" prefWidth="-1.0" text="PID" />
