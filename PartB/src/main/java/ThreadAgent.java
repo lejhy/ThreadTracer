@@ -1,4 +1,5 @@
 import BackEnd.ThreadTracer;
+import FrontEnd.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -62,9 +63,9 @@ public class ThreadAgent extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("ThreadAgent.fxml"));
 		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("ThreadAgent.fxml"));
 			Scene scene = new Scene(loader.load());
 			scene.getStylesheets().add(getClass().getResource("ThreadAgent.css").toString());
 			primaryStage.setScene(scene);
@@ -74,6 +75,8 @@ public class ThreadAgent extends Application {
 			Platform.exit();
 		}
 		
+		Controller controller = loader.getController();
+		controller.setThreadTracer(new ThreadTracer());
 		primaryStage.setResizable(true);
 		primaryStage.setTitle("ThreadAgent");
 		primaryStage.show();

@@ -58,7 +58,4 @@ public class ThreadTracer {
         }
         return threads;
     }
-
-
-
 }
