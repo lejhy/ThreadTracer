@@ -15,6 +15,7 @@ jar {
     archiveName = "${rootProject.name}.jar"
     manifest {
         attributes(
+        		'Main-Class': 'ThreadAgent',
                 'Premain-Class': 'ThreadAgent',
                 'Can-Redefine-Classes': 'true',
                 'Can-Retransform-Classes': 'true',
