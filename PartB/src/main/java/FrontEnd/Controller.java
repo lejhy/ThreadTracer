@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import BackEnd.ThreadRep;
+import BackEnd.ThreadEntry;
 import BackEnd.ThreadTracer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,22 +25,22 @@ public class Controller {
     private URL location;
     
     @FXML
-    private TableView<Thread> threadTable;
+    private TableView<ThreadEntry> threadTable;
 
     @FXML
-    private TableColumn<Thread, String> name;
+    private TableColumn<ThreadEntry, String> name;
 
     @FXML
-    private TableColumn<Thread, Long> pid;
+    private TableColumn<ThreadEntry, Long> pid;
 
     @FXML
-    private TableColumn<Thread, Thread.State> state;
+    private TableColumn<ThreadEntry, String> state;
 
     @FXML
-    private TableColumn<Thread, Integer> priority;
+    private TableColumn<ThreadEntry, Integer> priority;
 
     @FXML
-    private TableColumn<Thread, Boolean> daemon;
+    private TableColumn<ThreadEntry, Boolean> daemon;
 
     @FXML
     void initialize() {
@@ -51,11 +51,11 @@ public class Controller {
         assert priority != null : "fx:id=\"priority\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         assert daemon != null : "fx:id=\"daemon\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         
-        name.setCellValueFactory(new PropertyValueFactory<Thread, String>("name"));
-        pid.setCellValueFactory(new PropertyValueFactory<Thread, Long>("id"));
-        state.setCellValueFactory(new PropertyValueFactory<Thread, Thread.State>("state"));
-        priority.setCellValueFactory(new PropertyValueFactory<Thread, Integer>("priority"));
-        daemon.setCellValueFactory(new PropertyValueFactory<Thread, Boolean>("daemon"));
+        name.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("name"));
+        pid.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Long>("PID"));
+        state.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("state"));
+        priority.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Integer>("priority"));
+        daemon.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Boolean>("daemon"));
     }
     
     public void setThreadTracer(ThreadTracer threadTracer) {
