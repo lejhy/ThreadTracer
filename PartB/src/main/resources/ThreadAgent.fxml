@@ -34,7 +34,7 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <Label text="Search: " />
-            <TextField fx:id="searchInput" onKeyTyped="#searchFilter" />
+            <TextField fx:id="searchInput" onKeyReleased="#searchFilter" />
         </items>
       </ToolBar>
    </children>
