@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.MenuItem?>
 
-<AnchorPane prefHeight="1335.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.Controller">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.Controller">
    <children>
-      <TableView fx:id="threadTable" layoutY="4.0" prefHeight="1335.0" prefWidth="670.0">
+      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TableView fx:id="threadTable" layoutY="4.0" prefHeight="1335.0" prefWidth="670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
         <columns>
           <TableColumn fx:id="name" minWidth="-1.0" prefWidth="-1.0" text="Name" />
           <TableColumn fx:id="pid" minWidth="-1.0" prefWidth="-1.0" text="PID" />
@@ -22,8 +43,8 @@
 	    <contextMenu>
           <ContextMenu>
             <items>
-              <MenuItem text="Terminate" onAction="#handleTerminateAction" />
-              <MenuItem text="Details" onAction="#handleDetailsAction" />
+              <MenuItem onAction="#handleTerminateAction" text="Terminate" />
+              <MenuItem onAction="#handleDetailsAction" text="Details" />
             </items>
           </ContextMenu>
         </contextMenu>
