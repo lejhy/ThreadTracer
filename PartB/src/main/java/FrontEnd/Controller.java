@@ -1,14 +1,11 @@
 package FrontEnd;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import BackEnd.ThreadEntry;
 import BackEnd.ThreadTracer;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -56,6 +53,16 @@ public class Controller {
         state.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("state"));
         priority.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Integer>("priority"));
         daemon.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Boolean>("daemon"));
+    }
+    
+    @FXML
+    public void handleTerminateAction(ActionEvent event) {
+    	System.out.println("terminate thread with pid " + threadTable.getSelectionModel().getSelectedItem().getPID());
+    }
+    
+    @FXML
+    public void handleDetailsAction(ActionEvent event) {
+    	System.out.println("details about thread with pid " + threadTable.getSelectionModel().getSelectedItem().getPID());
     }
     
     public void setThreadTracer(ThreadTracer threadTracer) {
