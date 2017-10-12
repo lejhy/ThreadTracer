@@ -46,6 +46,8 @@ public class Controller {
     @FXML
     private TextField searchInput;
 
+    @FXML
+    private Button btnNewThread;
 
     @FXML
     void initialize() {
@@ -106,4 +108,10 @@ public class Controller {
     void handleEditStart(TableColumn.CellEditEvent<ThreadEntry, String> event) {
         threadTracer.setUpdateFlag(false);
     }
+
+
+	@FXML
+	void handlebtnNewThread(ActionEvent event) {
+		threadTracer.createNewThread();
+	}
 }

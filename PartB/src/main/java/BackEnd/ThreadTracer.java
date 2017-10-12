@@ -10,12 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ThreadTracer {
-
+    private int newThreadID;
     private List<Thread> threads;
     private ObservableList<ThreadEntry> threadEntries;
     private List<Predicate<ThreadEntry>> filters;
     private boolean updateFlag;
     public ThreadTracer() {
+        newThreadID = 0;
         updateFlag = true;
         threads = new ArrayList<>();
     	threadEntries = FXCollections.observableArrayList();
@@ -139,5 +140,15 @@ public class ThreadTracer {
                 break;
             }
         }
+    }
+
+    public void createNewThread() {
+
+        Thread newThread = new Thread(() -> {while(true){}});
+        newThread.setDaemon(true);
+        newThread.setName("Custom thread " + newThreadID);
+        newThread.start();
+
+        newThreadID ++;
     }
 }
