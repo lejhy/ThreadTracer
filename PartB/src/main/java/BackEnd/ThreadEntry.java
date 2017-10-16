@@ -15,6 +15,7 @@ public class ThreadEntry {
     public StringProperty state;
     public IntegerProperty priority;
     public BooleanProperty daemon;
+    public StringProperty group;
     
     
     public String getName() {
@@ -36,6 +37,10 @@ public class ThreadEntry {
 	public Boolean getDaemon() {
 		return daemon.get();
 	}
+	
+	public String getGroup() {
+		return group.get();
+	}
 
 	public ThreadEntry(Thread thread){
         name = new SimpleStringProperty();
@@ -43,6 +48,7 @@ public class ThreadEntry {
         state = new SimpleStringProperty();
         priority = new SimpleIntegerProperty();
         daemon = new SimpleBooleanProperty();
+        group = new SimpleStringProperty();
         update(thread);
     }
     
@@ -52,6 +58,7 @@ public class ThreadEntry {
         state.set(thread.getState().name());;
         priority.set(thread.getPriority());;
         daemon.set(thread.isDaemon());;
+        group.set(thread.getThreadGroup().getName());
     }
     
 }

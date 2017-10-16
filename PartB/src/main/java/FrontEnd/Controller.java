@@ -46,6 +46,9 @@ public class Controller {
 
     @FXML
     private TableColumn<ThreadEntry, Boolean> daemon;
+    
+    @FXML 
+    private TableColumn<ThreadEntry, String> group;
 
     @FXML
     private TextField searchInput;
@@ -64,6 +67,7 @@ public class Controller {
         assert state != null : "fx:id=\"state\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         assert priority != null : "fx:id=\"priority\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         assert daemon != null : "fx:id=\"daemon\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
+        assert group != null : "fx:id=\"daemon\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         assert  searchInput!= null : "fx:id=\"seachInput\" was not injected: check your FXML file 'ThreadAgent.fxml'.";
         name.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -71,6 +75,7 @@ public class Controller {
         state.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("state"));
         priority.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Integer>("priority"));
         daemon.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Boolean>("daemon"));
+        group.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("group"));
     }
     
     @FXML
