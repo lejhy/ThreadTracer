@@ -10,17 +10,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ThreadTracer {
+	
     private int newThreadID;
     private List<Thread> threads;
     private ObservableList<ThreadEntry> threadEntries;
-    private List<Predicate<ThreadEntry>> filters;
+    private ObservableList<String> threadGroupNames;
+    private List<Predicate<Thread>> filters;
     private boolean updateFlag;
+    
+    
     public ThreadTracer() {
         newThreadID = 0;
         updateFlag = true;
         threads = new ArrayList<>();
     	threadEntries = FXCollections.observableArrayList();
-    	filters = new ArrayList<Predicate<ThreadEntry>>();
+    	threadGroupNames = FXCollections.observableArrayList();
+    	filters = new ArrayList<Predicate<Thread>>();
     	refreshThreads();
     	startRefreshLoop();
         Filtration f = new Filtration();
@@ -48,6 +53,7 @@ public class ThreadTracer {
 					e.printStackTrace();
 				}
 	        	refreshThreads();
+	        	refreshThreadGroups();
     		}
     	});
     	t.setDaemon(true);
@@ -58,21 +64,37 @@ public class ThreadTracer {
         return threadEntries;
     }
     
+    public ObservableList<String> getThreadGroupNames() {
+    	return threadGroupNames;
+    }
+    
+    private ThreadGroup getRootGroup() {
+    	ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
+        while (rootGroup.getParent() != null) {
+            rootGroup = rootGroup.getParent();
+        }
+        return rootGroup;
+    }
+    
+    private <E> List<E> transferArrayToList(E[] array) {
+    	List<E> list = new ArrayList<E>();
+    	for (E item : array) {
+            if (item != null) list.add(item);
+        }
+    	return list;
+    }
+    
     public void refreshThreads() {
         if(updateFlag) {
             // First of all get the array of existing threadEntries
-            ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
-            while (rootGroup.getParent() != null) {
-                rootGroup = rootGroup.getParent();
-            }
+            ThreadGroup rootGroup = getRootGroup();
             Thread[] threadArray = new Thread[rootGroup.activeCount()];
             rootGroup.enumerate(threadArray);
 
-            // Transfer all existing threadEntries to a List
-            List<Thread> threadList = new ArrayList<>();
-            for (Thread thread : threadArray) {
-                if (thread != null) threadList.add(thread);
-            }
+            List<Thread> threadList = transferArrayToList(threadArray);
+            
+            filterThreads(threadList);
+            
             threads.clear();
             threads.addAll(threadList);
 
@@ -80,7 +102,7 @@ public class ThreadTracer {
             List<ThreadEntry> entriesToRemove = new ArrayList<>();
             loop:
             for (ThreadEntry threadEntry : threadEntries) {
-                for (Thread thread : threadArray) {
+                for (Thread thread : threads) {
                     // If the thread exists, merely update its entry and remove the thread from the list
                     if (thread.getId() == threadEntry.PID.get()) {
                         threadEntry.update(thread);
@@ -97,17 +119,32 @@ public class ThreadTracer {
             for (Thread thread : threadList) {
                 threadEntries.add(new ThreadEntry(thread));
             }
-            filterThreads();
         }
     }
+    
+    public void refreshThreadGroups() {
+    	ThreadGroup rootGroup  = getRootGroup();
+    	ThreadGroup[] threadGroupArray = new ThreadGroup[rootGroup.activeGroupCount()];
+    	rootGroup.enumerate(threadGroupArray);
+    	
+    	List<ThreadGroup> threadGroupList = transferArrayToList(threadGroupArray);
+    	
+    	threadGroupList.add(rootGroup);
+    	
+    	for(ThreadGroup threadGroup : threadGroupList) {
+    		if (!threadGroupNames.contains(threadGroup.getName())) {
+    			threadGroupNames.add(threadGroup.getName());
+    		}
+    	}
+    }
 
-    public void filterThreads() {
-        for(Predicate<ThreadEntry> filter: filters) {
+    public void filterThreads(List<Thread> threads) {
+        for(Predicate<Thread> filter: filters) {
             Objects.requireNonNull(filter);
             int i = 0;
-            while (i < threadEntries.size()) {
-                if (!filter.test(threadEntries.get(i))) {
-                    threadEntries.remove(i);
+            while (i < threads.size()) {
+                if (!filter.test(threads.get(i))) {
+                	threads.remove(i);
                 } else {
                     i++;
                 }
@@ -115,15 +152,18 @@ public class ThreadTracer {
         }
     }
 
-    public void setFilter(Predicate<ThreadEntry> filter){
-        filters.clear();
+    public void addFilter(Predicate<Thread> filter){
         filters.add(filter);
+    }
+    
+    public void removeFilter(Predicate<Thread> filter) {
+    	filters.remove(filter);
     }
 
     public boolean terminateThread(long PID){
         for(Thread thread: threads){
             if(thread.getId() == PID){
-                thread.stop();
+                try {thread.stop();} catch (Exception e) {}
                 return true;
             }
         }

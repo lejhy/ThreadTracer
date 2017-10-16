@@ -2,12 +2,14 @@ package FrontEnd;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 import BackEnd.ThreadEntry;
 import BackEnd.ThreadTracer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -18,6 +20,8 @@ import javafx.scene.input.KeyEvent;
 public class Controller {
 	
 	ThreadTracer threadTracer;
+	Predicate<Thread> nameFilter;
+	Predicate<Thread> groupFilter;
 
     @FXML
     private ResourceBundle resources;
@@ -48,6 +52,9 @@ public class Controller {
 
     @FXML
     private Button btnNewThread;
+    
+    @FXML
+    private ComboBox<String> threadGroupSelector;
 
     @FXML
     void initialize() {
@@ -64,7 +71,6 @@ public class Controller {
         state.setCellValueFactory(new PropertyValueFactory<ThreadEntry, String>("state"));
         priority.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Integer>("priority"));
         daemon.setCellValueFactory(new PropertyValueFactory<ThreadEntry, Boolean>("daemon"));
-
     }
     
     @FXML
@@ -83,13 +89,16 @@ public class Controller {
     public void setThreadTracer(ThreadTracer threadTracer) {
     	this.threadTracer = threadTracer;
     	threadTable.setItems(threadTracer.getThreadEntries());
+    	threadGroupSelector.setItems(threadTracer.getThreadGroupNames());
     }
 
 
     @FXML
     void searchFilter(KeyEvent event) {
-        String searchQueary = "" + (searchInput.getCharacters());
-       threadTracer.setFilter(entry -> entry.getName().contains(searchQueary) == true);
+    	String searchQueary = "" + (searchInput.getCharacters());
+    	threadTracer.removeFilter(nameFilter);
+    	nameFilter = thread -> thread.getName().contains(searchQueary) == true;
+    	threadTracer.addFilter(nameFilter);
     }
 
     @FXML
@@ -114,4 +123,21 @@ public class Controller {
 	void handlebtnNewThread(ActionEvent event) {
 		threadTracer.createNewThread();
 	}
+	
+	@FXML
+    void threadGroupSelect(ActionEvent event) {
+		String groupName = threadGroupSelector.getSelectionModel().getSelectedItem();
+		threadTracer.removeFilter(groupFilter);
+		groupFilter = thread -> {
+			ThreadGroup threadGroup = thread.getThreadGroup();
+			while (threadGroup != null) {
+				if (threadGroup.getName().equals(groupName)) {
+					return true;
+				}
+				threadGroup = threadGroup.getParent();
+			} 
+			return false;
+		};
+		threadTracer.addFilter(groupFilter);
+    }
 }
