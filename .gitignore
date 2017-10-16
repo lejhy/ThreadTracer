@@ -1,9 +1,14 @@
 .idea/
-out/
+PartA/out/
+PartA/bankSystem/out/
 PartA/*.iml
+PartA/bankSystem/*.iml
 PartA/*.xml
+PartA/bankSystem/*.xml
 PartA/*.classpath
+PartA/bankSystem/*.classpath
 PartA/*.class
+PartA/bankSystem/*.class
 PartB/*.iml
 PartB/*.xml
 PartB/*.classpath
