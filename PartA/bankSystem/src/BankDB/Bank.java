@@ -1,9 +1,6 @@
 package BankDB;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 class Bank {
 
@@ -171,6 +168,5 @@ class Bank {
 
         return number;
     }
-
 
 }
