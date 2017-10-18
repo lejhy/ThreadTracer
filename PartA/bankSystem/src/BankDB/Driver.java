@@ -39,7 +39,7 @@ public class Driver {
 
     }
 
-    public int getUserInputInt(){
+    private int getUserInputInt(){
         int val = 0;
         try {
             val = Integer.parseInt(userInput.nextLine());
@@ -53,13 +53,13 @@ public class Driver {
         return getUserInputInt();
     }
 
-    public double getUserInputDouble(){
+    private double getUserInputDouble(){
         double val = 0;
         try {
             val = Double.parseDouble(userInput.nextLine());
         }
         catch(InputMismatchException e){
-            getUserInputInt();
+            getUserInputDouble();
         }
         if (Double.toString(val).matches("^\\d+\\.\\d{2}$")){
             return val;
