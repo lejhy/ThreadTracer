@@ -1,6 +1,6 @@
 package BankDB;
 
-class Customer {
+public class Customer extends User{
 
     String name;
     String postcode;

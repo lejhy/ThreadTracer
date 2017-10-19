@@ -48,7 +48,7 @@ class Bank {
                     System.out.println("That's the new Current Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
                     System.out.println("Account Number:\t" + accountNumber);
                 }else{
-                    System.out.println("The account could ot be created.");
+                    System.out.println("The account could not be created.");
                     return false;
                 }
                 break;
@@ -61,7 +61,7 @@ class Bank {
                     System.out.println("That's the new Fixed Interest Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
                     System.out.println("Account Number:\t" + accountNumber);
                 }else{
-                    System.out.println("The account could ot be created.");
+                    System.out.println("The account could not be created.");
                     return false;
                 }
                 break;
@@ -74,7 +74,7 @@ class Bank {
                     System.out.println("That's the new Savings Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
                     System.out.println("Account Number:\t" + accountNumber);
                 }else{
-                    System.out.println("The account could ot be created.");
+                    System.out.println("The account could not be created.");
                     return false;
                 }
                 break;

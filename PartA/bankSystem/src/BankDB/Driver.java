@@ -7,9 +7,6 @@ public class Driver {
 
     private Scanner userInput = new Scanner(System.in);
 
-    public static void main(String[] args){
-        new Driver();
-    }
 
     public Driver(){
         BankDB.Bank bank = new BankDB.Bank();
