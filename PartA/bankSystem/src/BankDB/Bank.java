@@ -4,6 +4,7 @@ import java.util.*;
 
 class Bank {
 
+    private static final String CLERK_PASS = "1234"; //Need some sort of verification for a clerk to 'log in'
     HashMap<Customer, List<Account>> customerDB;
     HashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
@@ -167,6 +168,14 @@ class Bank {
         }
 
         return number;
+    }
+
+    public boolean clerkLogin(String pass){
+        if(pass.equals(CLERK_PASS)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
