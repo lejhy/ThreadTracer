@@ -15,89 +15,58 @@ public class Driver {
 
 
     public Driver(){
+
+
+        //Create Thread Groups.
+        //Create Runnable.
+        //Create Thread with runnable target, also assign Threads to Groups.
+        //Start ThreadGroups.
+
         String temp; //A placeholder for any string value we take from the user. Values generally aren't used more than once anyway.
         String name;
         String postcode;
         boolean validCategory = false;
         BankDB.Bank bank = new BankDB.Bank();
+        ThreadGroup clerkThreads = new ThreadGroup(Thread.currentThread().getThreadGroup(), "clerks"); //main ThreadGroup set as parent.
+        ThreadGroup customersThreads = new ThreadGroup(Thread.currentThread().getThreadGroup(), "customers"); //main ThreadGroup set as parent.
         Clerk clerk1 = new Clerk(); //A clerk wouldn't sign up for an account, so would need create the Clerk along with the Bank.
+        Customer customer1 = new Customer("Conner", "G21");
+        Customer customer2 = new Customer("Kuba", "G1");
 
-        //As we're hoping to have a GUI, we don't need proper input checking for 'Commands' i.e log in, or create new account etc etc
+        new Thread(clerkThreads, new UserRunnable(clerk1), "clerk1").start();
+        new Thread(customersThreads, new UserRunnable(customer1), "customer1").start();
+        new Thread(customersThreads, new UserRunnable(customer2), "customer2").start();
 
-        //Loops until the user inputs valid option in the console - there are internal loops that do the same within each of the choices.
-        do{
-            boolean validChoice = false;
-            System.out.println("Clerk or Customer?");
-            temp = userInput.next();
 
-            if (temp.toLowerCase().equals("clerk")) {
-                do { //Internal loop ensures the whole process does not need to be run again in case an incorrect password was entered - In the GUI we can implement a cancel function.
-                    System.out.println("Clerk password: ");
-                    temp = userInput.next();
-                    if (bank.clerkLogin(temp)) { //clerkLogin just checked the String given against the CLERK_PASS for that bank object and returns true if they match, false if not.
-                        validChoice = true;
-                        new UserRunnable(new Clerk()); //Created a new 'thread' that is ready to be started. This is essentially a new login session for the Clerk.
-                    } else {
-                        validChoice = false;
-                        System.out.println("Incorrect password.");
-                    }
-                }while(!validChoice);
-
-            } else if (temp.toLowerCase().equals("customer")) {
-                validCategory = true;
-
-                do {
-                    System.out.println("Login or Create account?");
-                    temp = userInput.next();
-
-                    if (temp.toLowerCase().equals("login")) {
-                        validChoice = true;
-                        System.out.print("Name: ");
-                        name = userInput.next();
-                        System.out.print("Postcode: ");
-                        postcode = userInput.next();
-
-                    } else if (temp.toLowerCase().equals("create")) {
-                        validChoice = true;
-
-                    } else {
-                        validChoice = false;
-                        System.out.println("Invalid option.");
-                    }
-                }while(!validChoice);
-
-            } else {
-                System.out.println("Invalid option.");
-                validCategory = false;
-            }
-        }while(!validCategory);
+        //Threads are created and are all started.
+        //At the moment does not do much.
 
 
 
 
-        bank.joiningCustomer("Conner", "G21");
-        bank.openAccount(bank.customerSearch("Conner", "G21"), 1);
-        bank.openAccount(bank.customerSearch("Conner", "G21"), 2);
-        bank.openAccount(bank.customerSearch("Conner", "G21"), 3);
-        System.out.println("Checking first account interest...");
-        System.out.println(bank.getCustomerDB().get(bank.customerSearch("Conner", "G21")).get(0).getInterest());
-
-        System.out.print("Search account: ");
-        int num = userInput.nextInt();
-        Account acc = bank.accountSearch(num);
-        if(acc != null) {
-            System.out.println("Account balance: " + acc.getBalance());
-        }
-
-        System.out.print("Make a deposit: ");
-        double val = userInput.nextDouble();
-        acc.deposit(val);
-        System.out.println("Balance: "+acc.getBalance());
-
-        System.out.print("Make a withdrawal: ");
-        val = userInput.nextDouble();
-        System.out.println("Withdrawn: "+acc.withdraw(val));
-        System.out.println("Balance: "+acc.getBalance());
+//        bank.joiningCustomer("Conner", "G21");
+//        bank.openAccount(bank.customerSearch("Conner", "G21"), 1);
+//        bank.openAccount(bank.customerSearch("Conner", "G21"), 2);
+//        bank.openAccount(bank.customerSearch("Conner", "G21"), 3);
+//        System.out.println("Checking first account interest...");
+//        System.out.println(bank.getCustomerDB().get(bank.customerSearch("Conner", "G21")).get(0).getInterest());
+//
+//        System.out.print("Search account: ");
+//        int num = userInput.nextInt();
+//        Account acc = bank.accountSearch(num);
+//        if(acc != null) {
+//            System.out.println("Account balance: " + acc.getBalance());
+//        }
+//
+//        System.out.print("Make a deposit: ");
+//        double val = userInput.nextDouble();
+//        acc.deposit(val);
+//        System.out.println("Balance: "+acc.getBalance());
+//
+//        System.out.print("Make a withdrawal: ");
+//        val = userInput.nextDouble();
+//        System.out.println("Withdrawn: "+acc.withdraw(val));
+//        System.out.println("Balance: "+acc.getBalance());
 
     }
 
