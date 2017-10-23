@@ -6,22 +6,24 @@ class Account {
     public static final double DEF_INTEREST = 1.01; //Adding interest will be done by amount*interest, so this adds 1% interest.
 
     protected int accountNumber;
+    protected String accountName;
     protected double balance;
     protected double interest;
     protected Customer owner;
     protected boolean locked = false;
 
 
-    protected Account(int acNum, Customer ow){
+    protected Account(int acNum, Customer ow, String n){
         accountNumber = acNum;
         owner = ow;
+        accountName = n;
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;
 
     }
 
-    protected boolean deposit(double amount){
-
+    protected synchronized boolean deposit(double amount){
+        System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a deposit...");
         if(!locked) {
             locked = true;
             this.balance = balance + amount;
@@ -33,7 +35,8 @@ class Account {
         }
     }
 
-    protected double withdraw(double amount){
+    protected synchronized double withdraw(double amount){
+        System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
         if(!locked) {
             locked = true;
             if (balance - amount > 0) {
@@ -44,7 +47,7 @@ class Account {
                 System.out.println("There are not enough funds to withdraw:\t" + amount);
                 System.out.println("\t\t\tBalance:\t" + getBalance());
                 locked = false;
-                return -1;
+                return 0.0;
             }
         }else{
             System.out.println("This account is locked and already being edited.");

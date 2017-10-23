@@ -9,8 +9,6 @@ public class Driver {
 
     public static void main(String[] args){
         new Driver();
-        Runnable user1 = new UserRunnable(new Clerk());
-        Runnable user2 = new UserRunnable(new Customer("Conner", "G21"));
     }
 
 
@@ -20,7 +18,7 @@ public class Driver {
         //Create Thread Groups.
         //Create Runnable.
         //Create Thread with runnable target, also assign Threads to Groups.
-        //Start ThreadGroups.
+        //Start Threads.
 
         String temp; //A placeholder for any string value we take from the user. Values generally aren't used more than once anyway.
         String name;
@@ -33,9 +31,16 @@ public class Driver {
         Customer customer1 = new Customer("Conner", "G21");
         Customer customer2 = new Customer("Kuba", "G1");
 
-        new Thread(clerkThreads, new UserRunnable(clerk1), "clerk1").start();
-        new Thread(customersThreads, new UserRunnable(customer1), "customer1").start();
-        new Thread(customersThreads, new UserRunnable(customer2), "customer2").start();
+        Thread cust1Thread = new Thread(new UserRunnable(customer1, bank));
+        Thread cust2Thread = new Thread(new UserRunnable(customer2, bank));
+
+        bank.openAccount(customer1, Bank.CURRENT_ACCOUNT, "Current Account 1");
+
+        cust1Thread.start();
+
+        //Both will access the same account simultaneously.
+
+
 
 
         //Threads are created and are all started.

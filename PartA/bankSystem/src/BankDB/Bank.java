@@ -5,9 +5,12 @@ import java.util.*;
 class Bank {
 
     private static final String CLERK_PASS = "1234"; //Need some sort of verification for a clerk to 'log in'
-    HashMap<Customer, List<Account>> customerDB;
-    HashMap<Integer, Account> accountDB;
+    private HashMap<Customer, List<Account>> customerDB;
+    private HashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
+    public static int CURRENT_ACCOUNT = 1;
+    public static int FIXED_INTEREST_ACCOUNT = 2;
+    public static int SAVINGS_ACCOUNT = 3;
 
 
     public Bank(){
@@ -17,7 +20,7 @@ class Bank {
 
 
 
-    public boolean joiningCustomer(String name, String postcode){
+    public synchronized boolean joiningCustomer(String name, String postcode){
        if(customerDB.keySet() != null) {
            for (Customer customer : customerDB.keySet()) {
 
@@ -34,15 +37,15 @@ class Bank {
     }
 
 
-    public boolean openAccount(Customer customer, int accountType){
+    public synchronized boolean openAccount(Customer customer, int accountType, String accountName){
 
         int accountNumber;
         accountNumber = generateAccountNumber();
         Account account;
         switch (accountType){
             case 1 :
-                if(isNewAccountAvailable(customer, 1)) {
-                    account = new CurrentAccount(accountNumber, customer);
+                if(isNewAccountAvailable(customer, CURRENT_ACCOUNT)) {
+                    account = new CurrentAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new current account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
                     accountDB.put(accountNumber, account);
@@ -54,8 +57,8 @@ class Bank {
                 }
                 break;
             case 2 :
-                if(isNewAccountAvailable(customer, 2)) {
-                    account = new FixedInterestAccount(accountNumber, customer);
+                if(isNewAccountAvailable(customer, FIXED_INTEREST_ACCOUNT)) {
+                    account = new FixedInterestAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new FI account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
                     accountDB.put(accountNumber, account);
@@ -67,8 +70,8 @@ class Bank {
                 }
                 break;
             case 3 :
-                if(isNewAccountAvailable(customer, 3)) {
-                    account = new SavingsAccount(accountNumber, customer);
+                if(isNewAccountAvailable(customer, SAVINGS_ACCOUNT)) {
+                    account = new SavingsAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new Savings account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
                     accountDB.put(accountNumber, account);
@@ -112,13 +115,13 @@ class Bank {
             }
         }
 
-        if(accType == 1 && c >= 2){
+        if(accType == CURRENT_ACCOUNT && c >= 2){
             System.out.println("You cannot open any more than two Current Accounts.");
             return false;
-        }else if(accType == 2 && f >= 2){
+        }else if(accType == FIXED_INTEREST_ACCOUNT && f >= 2){
             System.out.println("You cannot open any more than two Fixed Interest Accounts.");
             return false;
-        }else if(accType == 3 && s >= 2){
+        }else if(accType == SAVINGS_ACCOUNT && s >= 2){
             System.out.println("You cannot open any more than two Savings Accounts.");
             return false;
         }
@@ -138,11 +141,11 @@ class Bank {
         return null;
     }
 
-    public HashMap<Customer, List<Account>> getCustomerDB() {
+    HashMap<Customer, List<Account>> getCustomerDB() {
         return customerDB;
     }
 
-    public HashMap<Integer, Account> getAccountDB() {
+    HashMap<Integer, Account> getAccountDB() {
         return accountDB;
     }
 

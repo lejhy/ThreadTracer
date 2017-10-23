@@ -7,23 +7,18 @@ import java.util.Scanner;
 public class UserRunnable implements Runnable {
 
     User user;
-    Scanner input = new Scanner(System.in);
+    Bank bank;
 
-    public UserRunnable(User u){
+    public UserRunnable(User u, Bank b){
         user = u;
+        bank = b;
     }
 
-    //User thread will run continuously until user exits program. Multiple instances can be created for multiple users 'logging in'
     public void run(){
-        if(user.getClass().isInstance(Customer.class)){
-            System.out.println(user.getClass().getName() + "has logged in.");
-        }
-        System.out.println();
-        while(!input.next().toString().equals("exit")){
+
+        System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + " has started.");
 
 
-        }
-        System.exit(0);
     }
 
 
