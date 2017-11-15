@@ -32,7 +32,7 @@ class Account {
     protected boolean deposit(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a deposit...");
         try {
-            if (lock.tryLock(1, TimeUnit.SECONDS)) {
+            if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                 this.balance += amount;
             }
         }
@@ -46,25 +46,26 @@ class Account {
         }
     }
 
-    protected synchronized double withdraw(double amount){
+    protected double withdraw(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
-
-
-        if(!locked) {
-            locked = true;
-            if (balance - amount > 0) {
-                balance = balance - amount;
-                locked = false;
-                return amount * interest;
-            } else { //Not enough funds. Overdraught not available.
-                System.out.println("There are not enough funds to withdraw:\t" + amount);
-                System.out.println("\t\t\tBalance:\t" + getBalance());
-                locked = false;
+        try {
+            while (amount > getBalance()) {
+                System.out.println("Insufficient funds waiting for a deposit");
+                awaitFunds.await();
+            }
+            if (lock.tryLock(500, TimeUnit.MILLISECONDS)){
+                balance -= amount;
+            }else{
+                System.out.println("Waited for too long, moving on...");
                 return 0.0;
             }
-        }else{
-            System.out.println("This account is locked and already being edited.");
-            return 0.0;
+        }
+        catch(InterruptedException e){
+            System.out.println("Withdraw was interrupted by another thread");
+        }
+        finally {
+            lock.unlock();
+            return amount * interest;
         }
     }
 
