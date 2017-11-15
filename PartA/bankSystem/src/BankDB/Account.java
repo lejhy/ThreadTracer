@@ -1,5 +1,10 @@
 package BankDB;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 class Account {
 
     public static final double DEF_BALANCE = 0.0;
@@ -12,6 +17,9 @@ class Account {
     protected Customer owner;
     protected boolean locked = false;
 
+    private Lock lock = new ReentrantLock();
+    private Condition awaitFunds = lock.newCondition();
+
 
     protected Account(int acNum, Customer ow, String n){
         accountNumber = acNum;
@@ -19,24 +27,29 @@ class Account {
         accountName = n;
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;
-
     }
 
-    protected synchronized boolean deposit(double amount){
+    protected boolean deposit(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a deposit...");
-        if(!locked) {
-            locked = true;
-            this.balance = balance + amount;
-            locked = false;
-            return true;
-        }else {
-            System.out.println("This account is locked and already being edited.");
+        try {
+            if (lock.tryLock(1, TimeUnit.SECONDS)) {
+                this.balance += amount;
+            }
+        }
+        catch(InterruptedException e){
+            System.out.println("Deposit was interrupted by another thread");
             return false;
+            }
+        finally {
+            lock.unlock();
+            return true;
         }
     }
 
     protected synchronized double withdraw(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
+
+
         if(!locked) {
             locked = true;
             if (balance - amount > 0) {
