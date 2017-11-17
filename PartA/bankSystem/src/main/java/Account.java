@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -12,13 +14,13 @@ class Account {
 
     protected int accountNumber;
     protected String accountName;
-    protected List<Customer> owners;
+    protected Set<Customer> owners;
     protected double balance;
     protected double interest;
     protected boolean locked = false;
 
     private Lock lock = new ReentrantLock();
-    private Condition awaitFunds = lock.newCondition();
+    private Condition balanceIncreased = lock.newCondition();
 
     public enum Type {
         CHECKING, SAVINGS, FIXED_INTEREST
@@ -27,7 +29,7 @@ class Account {
     protected Account(int accountNumer, Customer owner, String accountName){
         this.accountNumber = accountNumer;
         this.accountName = accountName;
-        owners = new ArrayList<Customer>();
+        owners = new HashSet<Customer>();
         owners.add(owner);
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;
@@ -37,6 +39,7 @@ class Account {
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a deposit...");
         lock.lock();
         this.balance += amount;
+        balanceIncreased.signal();
         lock.unlock();
     }
 
@@ -45,14 +48,15 @@ class Account {
         boolean isWaiting = true;
         lock.lock();
         try {
-            while (amount > getBalance()) {
-                System.out.println("Insufficient funds waiting for a deposit");
-                isWaiting = awaitFunds.await(10, TimeUnit.SECONDS);
+            while (amount > balance) {
                 if (isWaiting == false) {
                     System.out.println("Waited for too long, moving on...");
                     Thread.currentThread().interrupt();
                 }
+                System.out.println("Insufficient funds waiting for a deposit");
+                isWaiting = balanceIncreased.await(10, TimeUnit.SECONDS);
             }
+            balance -= amount;
         } catch (InterruptedException e) {
             System.out.println("Withdraw was interrupted...");
         } finally {
@@ -68,6 +72,8 @@ class Account {
         locked = false;
     }
 
+    public boolean isLocked () { return locked; }
+
     public boolean addOwner(Customer customer) {
         return owners.add(customer);
     }
@@ -76,7 +82,7 @@ class Account {
         return owners.remove(customer);
     }
 
-    public List<Customer> getOwners(){
+    public Set<Customer> getOwners(){
         return owners;
     }
 

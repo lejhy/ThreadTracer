@@ -17,7 +17,7 @@ class BankTest {
         Customer customer1 = new Customer("addCustomerID", "addCustomerName1", "addCustomerPostcode1");
         Customer customer2 = new Customer("addCustomerID", "addCustomerName2", "addCustomerPostcode2");
         assertTrue(bank.addCustomer(customer1));
-        assertTrue(bank.addCustomer(customer2));
+        assertFalse(bank.addCustomer(customer1));
         assertEquals(bank.getCustomer(customer1.getID()), customer1);
         assertFalse(bank.addCustomer(customer2));
     }
@@ -33,9 +33,10 @@ class BankTest {
     @Test
     void openAccount() {
         Customer customer = new Customer("openAccount", "openAccount", "openAccount");
-        int checkingAccount = bank.openAccount(customer, Account.Type.CHECKING, "openAccountChecking");
-        int FixedInterestAccount = bank.openAccount(customer, Account.Type.FIXED_INTEREST, "openAccountFixedInterest");
-        int savingsAccount = bank.openAccount(customer, Account.Type.SAVINGS, "openAccountSavings");
+        bank.addCustomer(customer);
+        int checkingAccount = bank.openAccount("openAccount", Account.Type.CHECKING, "openAccountChecking");
+        int FixedInterestAccount = bank.openAccount("openAccount", Account.Type.FIXED_INTEREST, "openAccountFixedInterest");
+        int savingsAccount = bank.openAccount("openAccount", Account.Type.SAVINGS, "openAccountSavings");
 
         assertNotNull(bank.getAccount(checkingAccount));
         assertNotNull(bank.getAccount(FixedInterestAccount));

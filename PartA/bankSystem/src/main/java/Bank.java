@@ -6,13 +6,13 @@ class Bank {
 
     private static final String CLERK_PASS = "1234"; //Need some sort of verification for a clerk to 'log in'
 
-    private HashMap<Customer, List<Account>> customerDB;
+    private HashMap<String, Customer> customerDB;
     private HashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
     private Lock lock = new ReentrantLock();
 
     public Bank(){
-        customerDB = new HashMap<Customer, List<Account>>();
+        customerDB = new HashMap<String, Customer>();
         accountDB = new HashMap<Integer, Account>();
     }
 
@@ -20,12 +20,12 @@ class Bank {
     public boolean addCustomer(Customer customer){
         System.out.println("Adding new customer");
         lock.lock();
-        if (customerDB.containsKey(customer)) {
+        if (customerDB.containsKey(customer.getID())) {
             lock.unlock();
             System.out.println("This customer already exists!");
             return false;
         } else {
-            customerDB.put(customer, new ArrayList<Account>());
+            customerDB.put(customer.getID(), customer);
             lock.unlock();
             System.out.println("You're signed up!");
             return true;
@@ -36,24 +36,26 @@ class Bank {
     public boolean removeCustomer(String customerID) {
         System.out.println("Removing customer with ID: " + customerID);
         lock.lock();
-        for (Customer customer : customerDB.keySet()) {
-            if (customer.getID().equals(customerID)) {
-                for (Account account : customerDB.get(customer)) {
-                    account.removeOwner(customer);
-                    if (account.owners.size() == 0) {
-                        accountDB.remove(account.getAccountNumber());
-                    }
+        Customer customer = customerDB.get(customerID);
+        if (customer != null) {
+            for (Account account : customer.getAccounts()) {
+                account.removeOwner(customer);
+                if (account.owners.size() == 0) {
+                    accountDB.remove(account.getAccountNumber());
                 }
-                customerDB.remove(customer);
-                lock.unlock();
-                return true;
             }
-        }
+            customerDB.remove(customerID);
+            lock.unlock();
+            return true;
+        };
         lock.unlock();
         return false;
     }
 
-    public int openAccount(Customer customer, Account.Type accountType, String accountName){
+    public int openAccount(String customerID, Account.Type accountType, String accountName){
+
+        Customer customer = customerDB.get(customerID);
+        if (customer == null) return -1; // Customer does not exist
         int accountNumber = generateAccountNumber();
         Account account;
         switch (accountType) {
@@ -72,10 +74,7 @@ class Bank {
         }
 
         lock.lock();
-        if (!customerDB.containsKey(customer)) {
-            addCustomer(customer);
-        }
-        customerDB.get(customer).add(account);
+        customer.addAccount(account);
         accountDB.put(accountNumber, account);
         lock.unlock();
 
@@ -96,13 +95,7 @@ class Bank {
     }
 
     public Customer getCustomer(String ID){
-        for (Customer customer : customerDB.keySet()) {
-            if (customer.getID().equals(ID)) {
-                return customer;
-            }
-        }
-        System.out.println("main.java.Customer not found.");
-        return null;
+        return customerDB.get(ID);
     }
 
     public int generateAccountNumber(){
