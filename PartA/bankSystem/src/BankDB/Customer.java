@@ -1,10 +1,10 @@
 package BankDB;
 
-public class Customer extends User{
+public class Customer{
 
-    String ID;
-    String name;
-    String postcode;
+    private String ID;
+    private String name;
+    private String postcode;
 
     public Customer(String ID, String name, String postcode){
         this.ID = ID;
@@ -19,4 +19,5 @@ public class Customer extends User{
     }
 
     public String getPostcode() { return postcode; }
+
 }

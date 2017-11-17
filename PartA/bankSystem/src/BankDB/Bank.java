@@ -16,7 +16,7 @@ class Bank {
     }
 
 
-    public synchronized boolean addCustomer(Customer customer){
+    public boolean addCustomer(Customer customer){
         // TODO synchronize
         System.out.println("Adding new customer");
         if (customerDB.containsKey(customer)) {
@@ -30,59 +30,38 @@ class Bank {
     }
 
 
-    public synchronized boolean openAccount(Customer customer, Account.Type accountType, String accountName){
-
-        int accountNumber;
-        accountNumber = generateAccountNumber();
+    public boolean openAccount(Customer customer, Account.Type accountType, String accountName){
+        // TODO synchronize
+        int accountNumber = generateAccountNumber();
         Account account;
-        switch (accountType){
-            case CHECKING :
-                if(isNewAccountAvailable(customer, Account.Type.CHECKING)) {
-                    account = new CurrentAccount(accountNumber, customer, accountName);
-                    System.out.println("Adding a new current account with no: "+ accountNumber);
-                    customerDB.get(customer).add(account);
-                    accountDB.put(accountNumber, account);
-                    System.out.println("That's the new Current Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
-                    System.out.println("Account Number:\t" + accountNumber);
-                }else{
-                    System.out.println("The account could not be created.");
-                    return false;
-                }
+        switch (accountType) {
+            case CHECKING:
+                account = new CheckingAccount(accountNumber, customer, accountName);
                 break;
-            case FIXED_INTEREST :
-                if(isNewAccountAvailable(customer, Account.Type.FIXED_INTEREST)) {
-                    account = new FixedInterestAccount(accountNumber, customer, accountName);
-                    System.out.println("Adding a new FI account with no: "+ accountNumber);
-                    customerDB.get(customer).add(account);
-                    accountDB.put(accountNumber, account);
-                    System.out.println("That's the new Fixed Interest Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
-                    System.out.println("Account Number:\t" + accountNumber);
-                }else{
-                    System.out.println("The account could not be created.");
-                    return false;
-                }
+            case FIXED_INTEREST:
+                account = new FixedInterestAccount(accountNumber, customer, accountName);
                 break;
-            case SAVINGS :
-                if(isNewAccountAvailable(customer, Account.Type.SAVINGS)) {
-                    account = new SavingsAccount(accountNumber, customer, accountName);
-                    System.out.println("Adding a new Savings account with no: "+ accountNumber);
-                    customerDB.get(customer).add(account);
-                    accountDB.put(accountNumber, account);
-                    System.out.println("That's the new Savings Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
-                    System.out.println("Account Number:\t" + accountNumber);
-                }else{
-                    System.out.println("The account could not be created.");
-                    return false;
-                }
+            case SAVINGS:
+                account = new SavingsAccount(accountNumber, customer, accountName);
                 break;
-            default :
-                System.out.println("Invalid selection, please try again.");
+            default:
+                System.out.println("Could not create an account, unexpected Account.Type: " + accountType);
+                return false;
         }
+
+        if (!customerDB.containsKey(customer)) {
+            addCustomer(customer);
+        }
+
+        customerDB.get(customer).add(account);
+        accountDB.put(accountNumber, account);
+        System.out.println("That's the new Current Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
+        System.out.println("Account Number:\t" + accountNumber);
 
         return true;
     }
 
-    public Account accountSearch(int accountNumber){
+    public Account getAccount(int accountNumber){
         System.out.println("ACCOUNT DATABASE:");
         System.out.println(accountDB.keySet());
         if(accountDB.keySet().contains(accountNumber)){
@@ -92,42 +71,10 @@ class Bank {
         return null;
     }
 
-
-    public boolean isNewAccountAvailable(Customer customer, Account.Type accType){
-        int c = 0;
-        int f = 0;
-        int s = 0;
-
-        for(Account account : customerDB.get(customer)){
-            if(account instanceof CurrentAccount){
-                c++;
-            }else if(account instanceof FixedInterestAccount){
-                f++;
-            }else if(account instanceof SavingsAccount){
-                s++;
-            }
-        }
-
-        if(accType == Account.Type.CHECKING && c >= 2){
-            System.out.println("You cannot open any more than two Current Accounts.");
-            return false;
-        }else if(accType == Account.Type.FIXED_INTEREST && f >= 2){
-            System.out.println("You cannot open any more than two Fixed Interest Accounts.");
-            return false;
-        }else if(accType == Account.Type.SAVINGS && s >= 2){
-            System.out.println("You cannot open any more than two Savings Accounts.");
-            return false;
-        }
-        System.out.println("You have "+c+" Current Account(s), "+f+" Fixed Interest Account(s) and "+s+" Savings Accounts currently open.");
-        return true;
-    }
-
-    public Customer customerSearch(String name, String postcode){
-        if(customerDB.keySet() != null) {
-            for (Customer customer : customerDB.keySet()) {
-                if (customer.getName().equals(name) && customer.getPostcode().equals(postcode)) {
-                    return customer;
-                }
+    public Customer getCustomer(String ID){
+        for (Customer customer : customerDB.keySet()) {
+            if (customer.getID().equals(ID)) {
+                return customer;
             }
         }
         System.out.println("BankDB.Customer not found.");
@@ -144,34 +91,15 @@ class Bank {
 
     public int generateAccountNumber(){
 
-        int number;
+        int number = rand.nextInt(1000000);
 
-        number = rand.nextInt();
-        if(number < 0){
-            number = number * -1;
-        }
-        number = Integer.parseInt((""+number).toString().substring(0, 6));
-        //Generate a (pseudo)random integer and clip it to 6 digits.
-
-        //There are more sophisticated ways to do this - but it is not the task at hand...
-
-        if(accountDB.keySet() != null){
-            for(Integer account : accountDB.keySet()){
-                if(number == account){ //If the account number is already taken
-                    number = generateAccountNumber(); //Try to generate again.
-                }
+        for(Integer account : accountDB.keySet()){
+            if(number == account){ //If the account number is already taken
+                number = generateAccountNumber(); //Try to generate again.
             }
         }
 
         return number;
-    }
-
-    public boolean clerkLogin(String pass){
-        if(pass.equals(CLERK_PASS)){
-            return true;
-        }else{
-            return false;
-        }
     }
 
 }

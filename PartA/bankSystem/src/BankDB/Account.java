@@ -39,7 +39,7 @@ class Account {
         lock.unlock();
     }
 
-    protected void withdraw(double amount){
+    protected void withdraw(double amount) {
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
         boolean isWaiting = true;
         lock.lock();
@@ -52,13 +52,19 @@ class Account {
                     Thread.currentThread().interrupt();
                 }
             }
-        }
-        catch(InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println("Withdraw was interrupted...");
-        }
-        finally {
+        } finally {
             lock.unlock();
         }
+    }
+
+    public void lockAccount(){
+        locked = true;
+    }
+
+    public void unlockAccount(){
+        locked = false;
     }
 
     public Customer getOwner(){
@@ -75,18 +81,6 @@ class Account {
 
     public int getAccountNumber(){
         return accountNumber;
-    }
-
-    public void lockAccount(Customer customer){
-        // TODO synchronize
-        locked = true;
-        customer.setLockedAccount(this);
-    }
-
-    public void unlockAccount(Customer customer){
-        // TODO synchronize
-        locked = false;
-        customer.setLockedAccount(null);
     }
 
 }
