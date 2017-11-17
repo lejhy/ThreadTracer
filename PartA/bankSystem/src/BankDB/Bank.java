@@ -1,6 +1,8 @@
 package BankDB;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Bank {
 
@@ -9,6 +11,7 @@ class Bank {
     private HashMap<Customer, List<Account>> customerDB;
     private HashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
+    private Lock lock = new ReentrantLock();
 
     public Bank(){
         customerDB = new HashMap<Customer, List<Account>>();
@@ -17,13 +20,15 @@ class Bank {
 
 
     public boolean addCustomer(Customer customer){
-        // TODO synchronize
         System.out.println("Adding new customer");
+        lock.lock();
         if (customerDB.containsKey(customer)) {
+            lock.unlock();
             System.out.println("This customer already exists!");
             return false;
         } else {
             customerDB.put(customer, new ArrayList<Account>());
+            lock.unlock();
             System.out.println("You're signed up!");
             return true;
         }
@@ -31,7 +36,6 @@ class Bank {
 
 
     public boolean openAccount(Customer customer, Account.Type accountType, String accountName){
-        // TODO synchronize
         int accountNumber = generateAccountNumber();
         Account account;
         switch (accountType) {
@@ -49,12 +53,14 @@ class Bank {
                 return false;
         }
 
+        lock.lock();
         if (!customerDB.containsKey(customer)) {
             addCustomer(customer);
         }
-
         customerDB.get(customer).add(account);
         accountDB.put(accountNumber, account);
+        lock.unlock();
+
         System.out.println("That's the new Current Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
         System.out.println("Account Number:\t" + accountNumber);
 
