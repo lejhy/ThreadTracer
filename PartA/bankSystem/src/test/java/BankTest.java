@@ -1,34 +1,51 @@
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankTest {
+
+    Bank bank;
+
+    @BeforeAll
+    void beforeAll() {
+        bank = new Bank();
+    }
+
     @Test
     void addCustomer() {
+        Customer customer1 = new Customer("addCustomerID", "addCustomerName1", "addCustomerPostcode1");
+        Customer customer2 = new Customer("addCustomerID", "addCustomerName2", "addCustomerPostcode2");
+        assertTrue(bank.addCustomer(customer1));
+        assertEquals(bank.getCustomer(customer1.getID()), customer1);
+        assertFalse(bank.addCustomer(customer2));
+    }
+
+    @Test
+    void removeCustomer() {
+        Customer customer = new Customer("removeCustomerID", "removeCustomerName", "removeCustomerPostcode");
+        assertTrue(bank.addCustomer(customer));
+        assertTrue(bank.removeCustomer(customer.getID()));
+        assertFalse(bank.removeCustomer(customer.getID()));
     }
 
     @Test
     void openAccount() {
-    }
+        Customer customer = new Customer("openAccount", "openAccount", "openAccount");
+        int checkingAccount = bank.openAccount(customer, Account.Type.CHECKING, "openAccountChecking");
+        int FixedInterestAccount = bank.openAccount(customer, Account.Type.FIXED_INTEREST, "openAccountFixedInterest");
+        int savingsAccount = bank.openAccount(customer, Account.Type.SAVINGS, "openAccountSavings");
 
-    @Test
-    void getAccount() {
-    }
-
-    @Test
-    void getCustomer() {
-    }
-
-    @Test
-    void getCustomerDB() {
-    }
-
-    @Test
-    void getAccountDB() {
+        assertNotNull(bank.getAccount(checkingAccount));
+        assertNotNull(bank.getAccount(FixedInterestAccount));
+        assertNotNull(bank.getAccount(savingsAccount));
+        assertNull(bank.getAccount(123456));
     }
 
     @Test
     void generateAccountNumber() {
+        assertNotEquals(bank.generateAccountNumber(), bank.generateAccountNumber());
     }
 
 }

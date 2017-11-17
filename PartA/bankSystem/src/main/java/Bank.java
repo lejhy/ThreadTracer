@@ -33,7 +33,27 @@ class Bank {
     }
 
 
-    public boolean openAccount(Customer customer, Account.Type accountType, String accountName){
+    public boolean removeCustomer(String customerID) {
+        System.out.println("Removing customer with ID: " + customerID);
+        lock.lock();
+        for (Customer customer : customerDB.keySet()) {
+            if (customer.getID().equals(customerID)) {
+                for (Account account : customerDB.get(customer)) {
+                    account.removeOwner(customer);
+                    if (account.owners.size() == 0) {
+                        accountDB.remove(account.getAccountNumber());
+                    }
+                }
+                customerDB.remove(customer);
+                lock.unlock();
+                return true;
+            }
+        }
+        lock.unlock();
+        return false;
+    }
+
+    public int openAccount(Customer customer, Account.Type accountType, String accountName){
         int accountNumber = generateAccountNumber();
         Account account;
         switch (accountType) {
@@ -48,7 +68,7 @@ class Bank {
                 break;
             default:
                 System.out.println("Could not create an account, unexpected Account.Type: " + accountType);
-                return false;
+                return -1;
         }
 
         lock.lock();
@@ -62,7 +82,7 @@ class Bank {
         System.out.println("That's the new Current Account opened for you! - NO OF ACCOUNTS: "+accountDB.size());
         System.out.println("Account Number:\t" + accountNumber);
 
-        return true;
+        return accountNumber;
     }
 
     public Account getAccount(int accountNumber){
@@ -83,14 +103,6 @@ class Bank {
         }
         System.out.println("main.java.Customer not found.");
         return null;
-    }
-
-    HashMap<Customer, List<Account>> getCustomerDB() {
-        return customerDB;
-    }
-
-    HashMap<Integer, Account> getAccountDB() {
-        return accountDB;
     }
 
     public int generateAccountNumber(){

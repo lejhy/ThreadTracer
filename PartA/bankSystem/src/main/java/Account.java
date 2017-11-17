@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -10,7 +12,7 @@ class Account {
 
     protected int accountNumber;
     protected String accountName;
-    protected Customer owner;
+    protected List<Customer> owners;
     protected double balance;
     protected double interest;
     protected boolean locked = false;
@@ -22,10 +24,11 @@ class Account {
         CHECKING, SAVINGS, FIXED_INTEREST
     }
 
-    protected Account(int acNum, Customer ow, String n){
-        accountNumber = acNum;
-        accountName = n;
-        owner = ow;
+    protected Account(int accountNumer, Customer owner, String accountName){
+        this.accountNumber = accountNumer;
+        this.accountName = accountName;
+        owners = new ArrayList<Customer>();
+        owners.add(owner);
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;
     }
@@ -65,8 +68,16 @@ class Account {
         locked = false;
     }
 
-    public Customer getOwner(){
-        return owner;
+    public boolean addOwner(Customer customer) {
+        return owners.add(customer);
+    }
+
+    public boolean removeOwner(Customer customer) {
+        return owners.remove(customer);
+    }
+
+    public List<Customer> getOwners(){
+        return owners;
     }
 
     public double getInterest(){

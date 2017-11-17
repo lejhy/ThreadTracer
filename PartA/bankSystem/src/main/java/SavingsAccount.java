@@ -10,7 +10,6 @@ class SavingsAccount extends Account {
         System.out.println("OPENING BALANCE OF: "+balance);
         System.out.println("Account Number: "+accountNumber);
 
-
     }
 
 }
