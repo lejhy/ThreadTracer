@@ -12,9 +12,9 @@ class Account {
 
     protected int accountNumber;
     protected String accountName;
+    protected Customer owner;
     protected double balance;
     protected double interest;
-    protected Customer owner;
     protected boolean locked = false;
 
     private Lock lock = new ReentrantLock();
@@ -23,49 +23,38 @@ class Account {
 
     protected Account(int acNum, Customer ow, String n){
         accountNumber = acNum;
-        owner = ow;
         accountName = n;
+        owner = ow;
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;
     }
 
-    protected boolean deposit(double amount){
+    protected void deposit(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a deposit...");
-        try {
-            if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
-                this.balance += amount;
-            }
-        }
-        catch(InterruptedException e){
-            System.out.println("Deposit was interrupted by another thread");
-            return false;
-            }
-        finally {
-            lock.unlock();
-            return true;
-        }
+        lock.lock();
+        this.balance += amount;
+        lock.unlock();
     }
 
-    protected double withdraw(double amount){
+    protected void withdraw(double amount){
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
+        boolean isWaiting = true;
+        lock.lock();
         try {
             while (amount > getBalance()) {
                 System.out.println("Insufficient funds waiting for a deposit");
-                awaitFunds.await();
-            }
-            if (lock.tryLock(500, TimeUnit.MILLISECONDS)){
-                balance -= amount;
-            }else{
-                System.out.println("Waited for too long, moving on...");
-                return 0.0;
+                isWaiting = awaitFunds.await(10, TimeUnit.SECONDS);
+                if (isWaiting == false) {
+                    System.out.println("Waited for too long, moving on...");
+                    Thread.currentThread().interrupt();
+                }
             }
         }
         catch(InterruptedException e){
-            System.out.println("Withdraw was interrupted by another thread");
+            System.out.println("Withdraw was interrupted...");
         }
         finally {
             lock.unlock();
-            return amount * interest;
         }
     }
 
@@ -85,17 +74,14 @@ class Account {
         return accountNumber;
     }
 
-    public boolean lockAccount(Customer customer){
+    public void lockAccount(Customer customer){
         locked = true;
         customer.setLockedAccount(this);
-        return true;
     }
 
-    public boolean unlockAccount(Customer customer){
+    public void unlockAccount(Customer customer){
         locked = false;
         customer.setLockedAccount(null);
-        return true;
     }
-
 
 }
