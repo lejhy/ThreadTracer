@@ -1,4 +1,3 @@
-package BankDB;
 
 class SavingsAccount extends Account {
 

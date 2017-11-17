@@ -1,5 +1,3 @@
-package BankDB;
-
 public class Customer{
 
     private String ID;

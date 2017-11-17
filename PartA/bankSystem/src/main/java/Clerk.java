@@ -1,5 +1,3 @@
-package BankDB;
-
 public class Clerk{
 
     private String ID;

@@ -1,5 +1,3 @@
-package BankDB;
-
 class CheckingAccount extends Account{
 
     public CheckingAccount(int acNum, Customer owner, String accountName){

@@ -1,5 +1,3 @@
-package BankDB;
-
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -83,7 +81,7 @@ class Bank {
                 return customer;
             }
         }
-        System.out.println("BankDB.Customer not found.");
+        System.out.println("main.java.Customer not found.");
         return null;
     }
 

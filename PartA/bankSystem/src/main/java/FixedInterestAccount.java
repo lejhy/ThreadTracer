@@ -1,5 +1,3 @@
-package BankDB;
-
 class FixedInterestAccount extends Account {
 
     public FixedInterestAccount(int acNum, Customer owner, String accountName){
