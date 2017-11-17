@@ -15,64 +15,6 @@ public class Driver {
     public Driver(){
 
 
-        //Create Thread Groups.
-        //Create Runnable.
-        //Create Thread with runnable target, also assign Threads to Groups.
-        //Start Threads.
-
-        String temp; //A placeholder for any string value we take from the user. Values generally aren't used more than once anyway.
-        String name;
-        String postcode;
-        boolean validCategory = false;
-        BankDB.Bank bank = new BankDB.Bank();
-        ThreadGroup clerkThreads = new ThreadGroup(Thread.currentThread().getThreadGroup(), "clerks"); //main ThreadGroup set as parent.
-        ThreadGroup customersThreads = new ThreadGroup(Thread.currentThread().getThreadGroup(), "customers"); //main ThreadGroup set as parent.
-        Clerk clerk1 = new Clerk(); //A clerk wouldn't sign up for an account, so would need create the Clerk along with the Bank.
-        Customer customer1 = new Customer("Conner", "G21");
-        Customer customer2 = new Customer("Kuba", "G1");
-
-        Thread cust1Thread = new Thread(new UserRunnable(customer1, bank));
-        Thread cust2Thread = new Thread(new UserRunnable(customer2, bank));
-
-        bank.openAccount(customer1, Bank.CURRENT_ACCOUNT, "Current Account 1");
-
-        cust1Thread.start();
-
-        //Both will access the same account simultaneously.
-
-
-
-
-        //Threads are created and are all started.
-        //At the moment does not do much.
-
-
-
-
-//        bank.joiningCustomer("Conner", "G21");
-//        bank.openAccount(bank.customerSearch("Conner", "G21"), 1);
-//        bank.openAccount(bank.customerSearch("Conner", "G21"), 2);
-//        bank.openAccount(bank.customerSearch("Conner", "G21"), 3);
-//        System.out.println("Checking first account interest...");
-//        System.out.println(bank.getCustomerDB().get(bank.customerSearch("Conner", "G21")).get(0).getInterest());
-//
-//        System.out.print("Search account: ");
-//        int num = userInput.nextInt();
-//        Account acc = bank.accountSearch(num);
-//        if(acc != null) {
-//            System.out.println("Account balance: " + acc.getBalance());
-//        }
-//
-//        System.out.print("Make a deposit: ");
-//        double val = userInput.nextDouble();
-//        acc.deposit(val);
-//        System.out.println("Balance: "+acc.getBalance());
-//
-//        System.out.print("Make a withdrawal: ");
-//        val = userInput.nextDouble();
-//        System.out.println("Withdrawn: "+acc.withdraw(val));
-//        System.out.println("Balance: "+acc.getBalance());
-
     }
 
     private int getUserInputInt(){

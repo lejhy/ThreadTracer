@@ -20,6 +20,9 @@ class Account {
     private Lock lock = new ReentrantLock();
     private Condition awaitFunds = lock.newCondition();
 
+    public enum Type {
+        CHECKING, SAVINGS, FIXED_INTEREST
+    }
 
     protected Account(int acNum, Customer ow, String n){
         accountNumber = acNum;
@@ -75,11 +78,13 @@ class Account {
     }
 
     public void lockAccount(Customer customer){
+        // TODO synchronize
         locked = true;
         customer.setLockedAccount(this);
     }
 
     public void unlockAccount(Customer customer){
+        // TODO synchronize
         locked = false;
         customer.setLockedAccount(null);
     }

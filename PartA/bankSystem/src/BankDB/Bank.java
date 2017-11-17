@@ -5,13 +5,10 @@ import java.util.*;
 class Bank {
 
     private static final String CLERK_PASS = "1234"; //Need some sort of verification for a clerk to 'log in'
+
     private HashMap<Customer, List<Account>> customerDB;
     private HashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
-    public static int CURRENT_ACCOUNT = 1;
-    public static int FIXED_INTEREST_ACCOUNT = 2;
-    public static int SAVINGS_ACCOUNT = 3;
-
 
     public Bank(){
         customerDB = new HashMap<Customer, List<Account>>();
@@ -19,32 +16,28 @@ class Bank {
     }
 
 
-
-    public synchronized boolean joiningCustomer(String name, String postcode){
-       if(customerDB.keySet() != null) {
-           for (Customer customer : customerDB.keySet()) {
-
-               if (customer.getName().equals(name) && customer.getPostcode().equals(postcode)) { //If the customer has already joined
-                   System.out.println("You have already enrolled!");
-                   return false;
-               }
-
-           }
-       }
-        customerDB.put(new Customer(name, postcode), new ArrayList<Account>());
-       System.out.println("You're signed up!");
-        return true;
+    public synchronized boolean addCustomer(Customer customer){
+        // TODO synchronize
+        System.out.println("Adding new customer");
+        if (customerDB.containsKey(customer)) {
+            System.out.println("This customer already exists!");
+            return false;
+        } else {
+            customerDB.put(customer, new ArrayList<Account>());
+            System.out.println("You're signed up!");
+            return true;
+        }
     }
 
 
-    public synchronized boolean openAccount(Customer customer, int accountType, String accountName){
+    public synchronized boolean openAccount(Customer customer, Account.Type accountType, String accountName){
 
         int accountNumber;
         accountNumber = generateAccountNumber();
         Account account;
         switch (accountType){
-            case 1 :
-                if(isNewAccountAvailable(customer, CURRENT_ACCOUNT)) {
+            case CHECKING :
+                if(isNewAccountAvailable(customer, Account.Type.CHECKING)) {
                     account = new CurrentAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new current account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
@@ -56,8 +49,8 @@ class Bank {
                     return false;
                 }
                 break;
-            case 2 :
-                if(isNewAccountAvailable(customer, FIXED_INTEREST_ACCOUNT)) {
+            case FIXED_INTEREST :
+                if(isNewAccountAvailable(customer, Account.Type.FIXED_INTEREST)) {
                     account = new FixedInterestAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new FI account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
@@ -69,8 +62,8 @@ class Bank {
                     return false;
                 }
                 break;
-            case 3 :
-                if(isNewAccountAvailable(customer, SAVINGS_ACCOUNT)) {
+            case SAVINGS :
+                if(isNewAccountAvailable(customer, Account.Type.SAVINGS)) {
                     account = new SavingsAccount(accountNumber, customer, accountName);
                     System.out.println("Adding a new Savings account with no: "+ accountNumber);
                     customerDB.get(customer).add(account);
@@ -100,7 +93,7 @@ class Bank {
     }
 
 
-    public boolean isNewAccountAvailable(Customer customer, int accType){
+    public boolean isNewAccountAvailable(Customer customer, Account.Type accType){
         int c = 0;
         int f = 0;
         int s = 0;
@@ -115,13 +108,13 @@ class Bank {
             }
         }
 
-        if(accType == CURRENT_ACCOUNT && c >= 2){
+        if(accType == Account.Type.CHECKING && c >= 2){
             System.out.println("You cannot open any more than two Current Accounts.");
             return false;
-        }else if(accType == FIXED_INTEREST_ACCOUNT && f >= 2){
+        }else if(accType == Account.Type.FIXED_INTEREST && f >= 2){
             System.out.println("You cannot open any more than two Fixed Interest Accounts.");
             return false;
-        }else if(accType == SAVINGS_ACCOUNT && s >= 2){
+        }else if(accType == Account.Type.SAVINGS && s >= 2){
             System.out.println("You cannot open any more than two Savings Accounts.");
             return false;
         }

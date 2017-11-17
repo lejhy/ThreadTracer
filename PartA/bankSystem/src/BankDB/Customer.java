@@ -2,28 +2,21 @@ package BankDB;
 
 public class Customer extends User{
 
+    String ID;
     String name;
     String postcode;
-    Account lockedAccount;
 
-    public Customer(String n, String p){
-        name = n;
-        postcode = p;
+    public Customer(String ID, String name, String postcode){
+        this.ID = ID;
+        this.name = name;
+        this.postcode = postcode;
     }
+
+    public String getID() { return ID; }
 
     public String getName() {
         return name;
     }
 
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public Account getLockedAccount() {
-        return lockedAccount;
-    }
-
-    public void setLockedAccount(Account account){
-        lockedAccount = account;
-    }
+    public String getPostcode() { return postcode; }
 }
