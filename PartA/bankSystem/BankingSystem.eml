@@ -5,5 +5,4 @@
 		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
 		<testFolder url="file://$MODULE_DIR$/src/test/resources"/>
 	</contentEntry>
-	<lib name="JUnit5" scope="TEST"/>
 </component>

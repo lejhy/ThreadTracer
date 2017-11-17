@@ -1,15 +1,14 @@
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankTest {
 
-    Bank bank;
+    static Bank bank;
 
     @BeforeAll
-    void beforeAll() {
+    static void beforeAll() {
         bank = new Bank();
     }
 
@@ -18,6 +17,7 @@ class BankTest {
         Customer customer1 = new Customer("addCustomerID", "addCustomerName1", "addCustomerPostcode1");
         Customer customer2 = new Customer("addCustomerID", "addCustomerName2", "addCustomerPostcode2");
         assertTrue(bank.addCustomer(customer1));
+        assertTrue(bank.addCustomer(customer2));
         assertEquals(bank.getCustomer(customer1.getID()), customer1);
         assertFalse(bank.addCustomer(customer2));
     }
