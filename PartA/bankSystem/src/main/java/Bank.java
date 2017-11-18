@@ -84,6 +84,16 @@ class Bank {
         return accountNumber;
     }
 
+    public boolean removeAccount (String customerID, int accountNumber) {
+        Account account = accountDB.get(accountNumber);
+        Customer customer = customerDB.get(customerID);
+        if (account != null && customer != null) {
+            return account.removeOwner(customer);
+        } else {
+            return false;
+        }
+    }
+
     public Account getAccount(int accountNumber){
         System.out.println("ACCOUNT DATABASE:");
         System.out.println(accountDB.keySet());

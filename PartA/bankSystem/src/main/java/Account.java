@@ -43,9 +43,10 @@ class Account {
         lock.unlock();
     }
 
-    protected void withdraw(double amount) {
+    protected boolean withdraw(double amount) {
         System.out.println(Thread.currentThread().getName() + "thread with ID: " + Thread.currentThread().getId() + "is attempting to make a withdrawal...");
         boolean isWaiting = true;
+        boolean success = false;
         lock.lock();
         try {
             while (amount > balance) {
@@ -57,11 +58,13 @@ class Account {
                 isWaiting = balanceIncreased.await(10, TimeUnit.SECONDS);
             }
             balance -= amount;
+            success = true;
         } catch (InterruptedException e) {
             System.out.println("Withdraw was interrupted...");
         } finally {
             lock.unlock();
         }
+        return success;
     }
 
     public void lockAccount(){
