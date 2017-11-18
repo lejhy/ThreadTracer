@@ -261,7 +261,7 @@ public class UI {
         if (customer == null) {
             System.out.println("Customer with this ID doesnt exist");
         } else {
-            if (account.addOwner(customer)) {
+            if (bank.addOwner(ID, account.getAccountNumber())) {
                 System.out.println("Owner was added successfuly");
             } else {
                 System.out.println("Something went wrong, owner was not added");
@@ -276,7 +276,7 @@ public class UI {
         if (customer == null) {
             System.out.println("Customer with this ID doesnt exist");
         } else {
-            if (account.removeOwner(customer)) {
+            if (bank.removeOwner(ID, account.getAccountNumber())) {
                 System.out.println("Owner removed successfuly");
             } else {
                 System.out.println("Something went wrong, owner was not removed");

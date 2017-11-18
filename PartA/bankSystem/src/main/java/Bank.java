@@ -122,6 +122,32 @@ class Bank {
         return number;
     }
 
+    public boolean addOwner(String customerID, int accountNumber) {
+        lock.lock();
+        Account account = accountDB.get(accountNumber);
+        Customer customer = customerDB.get(customerID);
+        if (account != null && customer != null) {
+            boolean result = account.addOwner(customer) && customer.addAccount(account);
+            lock.unlock();
+            return result;
+        }
+        lock.unlock();
+        return false;
+    }
+
+    public boolean removeOwner(String customerID, int accountNumber) {
+        lock.lock();
+        Account account = accountDB.get(accountNumber);
+        Customer customer = customerDB.get(customerID);
+        if (account != null && customer != null) {
+            boolean result = account.removeOwner(customer) && customer.removeAccount(account);
+            lock.unlock();
+            return result;
+        }
+        lock.unlock();
+        return false;
+    }
+
     @Override
     public String toString() {
         String string = "Customers: \n";
