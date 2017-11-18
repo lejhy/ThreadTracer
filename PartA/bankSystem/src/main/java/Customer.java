@@ -30,4 +30,25 @@ public class Customer{
 
     public boolean removeAccount(Account account) { return accounts.remove(account); }
 
+    @Override
+    public String toString() {
+        String string = "";
+        string += "ID: " + ID + "\n"
+                + "name: " + name + "\n"
+                + "postcode: " + postcode + "\n"
+                + "Accounts: \n";
+        for(Account account : accounts) {
+            string += account.toStringNoOwners();
+        }
+        return string;
+    }
+
+    public String toStringNoAccounts() {
+        String string = "";
+        string += "ID: " + ID + "\n"
+                + "name: " + name + "\n"
+                + "postcode: " + postcode + "\n";
+        return string;
+    }
+
 }

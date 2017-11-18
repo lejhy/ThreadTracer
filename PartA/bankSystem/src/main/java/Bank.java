@@ -122,4 +122,21 @@ class Bank {
         return number;
     }
 
+    @Override
+    public String toString() {
+        String string = "";
+        for (Customer customer : customerDB.values()) {
+            string += customer.toString();
+        }
+        return string;
+    }
+
+    public String toStringAccounts() {
+        String string = "";
+        for (Account account : accountDB.values()) {
+            string += account.toString();
+        }
+        return string;
+    }
+
 }

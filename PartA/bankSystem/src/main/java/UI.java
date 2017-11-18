@@ -35,7 +35,8 @@ public class UI {
         System.out.println("(0) Log in");
         System.out.println("(1) Add Customer");
         System.out.println("(2) Delete Customer");
-        System.out.println("(3) Exit");
+        System.out.println("(3) Print Bank");
+        System.out.println("(4) Exit");
         switch(getUserInputInt()) {
             case 0:
                 logIn();
@@ -47,6 +48,9 @@ public class UI {
                 deleteCustomer();
                 break;
             case 3:
+                printBank();
+                break;
+            case 4:
                 exit();
                 break;
             default:
@@ -59,7 +63,8 @@ public class UI {
         System.out.println("(0) go to Account");
         System.out.println("(1) Add Account");
         System.out.println("(2) Delete Account");
-        System.out.println("(3) logOut");
+        System.out.println("(3) Print Customer");
+        System.out.println("(4) logOut");
         switch(getUserInputInt()) {
             case 0:
                 goToAccount();
@@ -71,6 +76,9 @@ public class UI {
                 deleteAccount();
                 break;
             case 3:
+                printCustomer();
+                break;
+            case 4:
                 logOut();
                 break;
             default:
@@ -84,7 +92,8 @@ public class UI {
         System.out.println("(1) Withdraw");
         System.out.println("(2) Add Owner");
         System.out.println("(3) Remove Owner");
-        System.out.println("(4) go out of this Account");
+        System.out.println("(4) Remove Owner");
+        System.out.println("(5) go out of this Account");
         switch(getUserInputInt()) {
             case 0:
                 deposit();
@@ -101,10 +110,25 @@ public class UI {
             case 4:
                 geOutOfThisAccount();
                 break;
+            case 5:
+                printAccount();
+                break;
             default:
                 invalidChoice();
                 break;
         }
+    }
+
+    private void printBank() {
+        System.out.println(bank.toString());
+    }
+
+    private void printCustomer() {
+        System.out.println(customer.toString());
+    }
+
+    private void printAccount() {
+        System.out.println(account.toString());
     }
 
     private void logIn() {
@@ -130,7 +154,11 @@ public class UI {
             String name = getUserInputString();
             System.out.println("Customer Postcode: ");
             String postcode = getUserInputString();
-            bank.addCustomer(new Customer(ID, name, postcode));
+            if (bank.addCustomer(new Customer(ID, name, postcode))) {
+                System.out.println("Customer added successfuly");
+            } else {
+                System.out.println("Something went wrong, customer not added");
+            }
         } else {
             System.out.println("Customer with this ID already exists");
         }
@@ -142,7 +170,11 @@ public class UI {
         if (bank.getCustomer(ID) == null) {
             System.out.println("Customer with this ID doesnt exist");
         } else {
-            bank.removeCustomer(ID);
+            if (bank.removeCustomer(ID)) {
+                System.out.println("Customer removed successfuly");
+            } else {
+                System.out.println("Something went wrong, customer not removed");
+            }
         }
     }
 
@@ -230,9 +262,9 @@ public class UI {
             System.out.println("Customer with this ID doesnt exist");
         } else {
             if (account.addOwner(customer)) {
-                System.out.println("Owner added");
+                System.out.println("Owner was added successfuly");
             } else {
-                System.out.println("Owner not added");
+                System.out.println("Something went wrong, owner was not added");
             }
         }
     }
@@ -245,9 +277,9 @@ public class UI {
             System.out.println("Customer with this ID doesnt exist");
         } else {
             if (account.removeOwner(customer)) {
-                System.out.println("Owner removed");
+                System.out.println("Owner removed successfuly");
             } else {
-                System.out.println("Owner not removed");
+                System.out.println("Something went wrong, owner was not removed");
             }
         }
     }
@@ -260,9 +292,9 @@ public class UI {
             System.out.println("Account with this ID doesnt exist");
         } else {
             if (bank.removeAccount(customer.getID(), accountNumber)) {
-                System.out.println("Removed successfuly");
+                System.out.println("Account removed successfuly");
             } else {
-                System.out.println("Not removed");
+                System.out.println("Something went wrong, Account was not removed");
             }
         }
     }

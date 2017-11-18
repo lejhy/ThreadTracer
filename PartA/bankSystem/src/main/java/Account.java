@@ -102,4 +102,31 @@ class Account {
         return accountNumber;
     }
 
+    public String getAccountName() { return accountName; }
+
+    @Override
+    public String toString() {
+        String string = "";
+        string += "Number: " + accountNumber + "\n"
+                + "Name: " + accountName + "\n"
+                + "Balance: " + balance + "\n"
+                + "Interest: " + interest + "\n"
+                + "IsLocked: " + locked + "\n"
+                + "Owners: \n";
+        for(Customer owner : owners) {
+            string += owner.toStringNoAccounts();
+        }
+        return string;
+    }
+
+    public String toStringNoOwners() {
+        String string = "";
+        string += "Number: " + accountNumber + "\n"
+                + "Name: " + accountName + "\n"
+                + "Balance: " + balance + "\n"
+                + "Interest: " + interest + "\n"
+                + "IsLocked: " + locked + "\n";
+        return string;
+    }
+
 }
