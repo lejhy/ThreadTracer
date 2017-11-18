@@ -124,7 +124,7 @@ class Bank {
 
     @Override
     public String toString() {
-        String string = "";
+        String string = "Customers: \n";
         for (Customer customer : customerDB.values()) {
             string += customer.toString();
         }
@@ -132,7 +132,7 @@ class Bank {
     }
 
     public String toStringAccounts() {
-        String string = "";
+        String string = "Accounts: \n";
         for (Account account : accountDB.values()) {
             string += account.toString();
         }
