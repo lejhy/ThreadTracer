@@ -92,7 +92,7 @@ public class UI {
         System.out.println("(1) Withdraw");
         System.out.println("(2) Add Owner");
         System.out.println("(3) Remove Owner");
-        System.out.println("(4) Remove Owner");
+        System.out.println("(4) Print Account");
         System.out.println("(5) go out of this Account");
         switch(getUserInputInt()) {
             case 0:
