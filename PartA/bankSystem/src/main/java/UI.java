@@ -108,10 +108,10 @@ public class UI {
                 removeOwner();
                 break;
             case 4:
-                geOutOfThisAccount();
+                printAccount();
                 break;
             case 5:
-                printAccount();
+                geOutOfThisAccount();
                 break;
             default:
                 invalidChoice();
