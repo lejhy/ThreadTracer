@@ -1,5 +1,6 @@
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Customer{
 
@@ -12,7 +13,7 @@ public class Customer{
         this.ID = ID;
         this.name = name;
         this.postcode = postcode;
-        accounts = new HashSet<Account>();
+        accounts = ConcurrentHashMap.newKeySet();
     }
 
     public String getID() { return ID; }

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -29,7 +30,7 @@ class Account {
     protected Account(int accountNumer, Customer owner, String accountName){
         this.accountNumber = accountNumer;
         this.accountName = accountName;
-        owners = new HashSet<Customer>();
+        owners = ConcurrentHashMap.newKeySet();
         owners.add(owner);
         balance = DEF_BALANCE;
         interest = DEF_INTEREST;

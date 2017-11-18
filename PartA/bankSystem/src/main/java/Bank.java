@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -6,14 +7,14 @@ class Bank {
 
     private static final String CLERK_PASS = "1234"; //Need some sort of verification for a clerk to 'log in'
 
-    private HashMap<String, Customer> customerDB;
-    private HashMap<Integer, Account> accountDB;
+    private ConcurrentHashMap<String, Customer> customerDB;
+    private ConcurrentHashMap<Integer, Account> accountDB;
     private static Random rand = new Random();
     private Lock lock = new ReentrantLock();
 
     public Bank(){
-        customerDB = new HashMap<String, Customer>();
-        accountDB = new HashMap<Integer, Account>();
+        customerDB = new ConcurrentHashMap<String, Customer>();
+        accountDB = new ConcurrentHashMap<Integer, Account>();
     }
 
 
