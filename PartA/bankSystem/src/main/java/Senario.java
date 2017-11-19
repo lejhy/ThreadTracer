@@ -128,7 +128,7 @@ public class Senario {
         int accNum = b.openAccount(c1.getID(), Account.Type.SAVINGS, "Saving up for a teddy bear");
         Account a = b.getAccount(accNum);
         System.out.println("***Senario4 : Adding user to account");
-        a.addOwner(c2);
+        b.addOwner(c2.getID(), a.accountNumber);
         System.out.println("***Senario4 : Has the " + c2.getAccounts().contains(a));
         System.out.println("***Senario4 : The owners of the account are : " + a.getOwners());
     }
