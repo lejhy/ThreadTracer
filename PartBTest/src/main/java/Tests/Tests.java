@@ -38,7 +38,7 @@ public class Tests {
 	private static void loop(){
 		while (true) {
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				int x = 0;
 			}
