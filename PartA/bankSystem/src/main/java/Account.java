@@ -95,7 +95,10 @@ class Account {
     }
 
     public double getBalance(){
-        return balance;
+        lock.lock();
+        double bal = balance;
+        lock.unlock();
+        return bal;
     }
 
     public int getAccountNumber(){

@@ -86,11 +86,15 @@ class Bank {
     }
 
     public boolean removeAccount (String customerID, int accountNumber) {
+        lock.lock();
         Account account = accountDB.get(accountNumber);
         Customer customer = customerDB.get(customerID);
         if (account != null && customer != null) {
-            return account.removeOwner(customer);
+            Boolean a =  account.removeOwner(customer);
+            lock.unlock();
+            return a;
         } else {
+            lock.unlock();
             return false;
         }
     }
