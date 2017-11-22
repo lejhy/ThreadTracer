@@ -25,6 +25,12 @@ public class AccountContinuityTest {
 	void WW(){
 		System.out.println("Withdraw and withdraw");
 		withdraw();
+		try {
+			Thread.sleep(11000);
+		}
+		catch (InterruptedException e){
+
+		}
 		withdraw();
 	}
 
