@@ -120,7 +120,6 @@ public class ThreadTracer {
             	try {
 					threadEntries.add(new ThreadEntry(thread));
 				} catch (Exception e){
-					System.out.println(thread.getName());
 				}
             }
         }
@@ -164,7 +163,7 @@ public class ThreadTracer {
     	filters.remove(filter);
     }
 
-    public boolean terminateThread(long PID){
+    public boolean interruptThread(long PID){
         for(Thread thread: threads){
             if(thread.getId() == PID){
                 try {thread.interrupt();} catch (Exception e) {}
@@ -173,6 +172,16 @@ public class ThreadTracer {
         }
         return false;
     }
+
+	public boolean stopThread(long PID){
+		for(Thread thread: threads){
+			if(thread.getId() == PID){
+				try {thread.stop();} catch (Exception e) {}
+				return true;
+			}
+		}
+		return false;
+	}
     public void setUpdateFlag(boolean value){
         updateFlag = value;
     }

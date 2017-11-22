@@ -29,7 +29,8 @@
             <contextMenu>
                 <ContextMenu>
                     <items>
-                        <MenuItem onAction="#handleTerminateAction" text="Terminate" />
+                        <MenuItem onAction="#handleInterruptAction" text="Interrupt" />
+                        <MenuItem onAction="#handleStopAction" text="Stop" />
                         <MenuItem onAction="#handleDetailsAction" text="Details" />
                     </items>
                 </ContextMenu>

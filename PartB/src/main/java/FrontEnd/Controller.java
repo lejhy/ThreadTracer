@@ -79,12 +79,20 @@ public class Controller {
     }
     
     @FXML
-    public void handleTerminateAction(ActionEvent event) {
+    public void handleInterruptAction(ActionEvent event) {
         long PID = threadTable.getSelectionModel().getSelectedItem().getPID();
-    	System.out.println("terminate thread with pid " + PID);
-    	if(threadTracer.terminateThread(PID))
+    	System.out.println("interrupt thread with pid " + PID);
+    	if(threadTracer.interruptThread(PID))
     	    System.out.println("Success");
     }
+
+	@FXML
+	public void handleStopAction(ActionEvent event) {
+		long PID = threadTable.getSelectionModel().getSelectedItem().getPID();
+		System.out.println("stop thread with pid " + PID);
+		if(threadTracer.stopThread(PID))
+			System.out.println("Success");
+	}
     
     @FXML
     public void handleDetailsAction(ActionEvent event) {

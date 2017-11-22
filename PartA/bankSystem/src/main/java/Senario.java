@@ -123,25 +123,25 @@ public class Senario {
 		int accNum = b.openAccount(c1.getID(), Account.Type.SAVINGS, "Saving up for a teddy bear");
 		Account a = b.getAccount(accNum);
 		Thread t1 = new Thread(() -> a.withdraw(1000));
-		Thread t2 = new Thread(() -> a.deposit(1000));
-		System.out.println("***Senario4 : Withdrawing from the bank account current value £" + a.balance);
+		Thread t2 = new Thread(() -> a.deposit(1050));
+		System.out.println("***Senario4 : Withdrawing 1000 from the bank account current value £" + a.balance);
 		t1.start();
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			System.out.println("***Senario4 : Ohh sleep was disturbed?");
 		}
-		System.out.println("***Senario4 : Adding to the bank account current value £" + a.balance);
+		System.out.println("***Senario4 : Adding 1050 to the bank account current value £" + a.balance);
 		t2.start();
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			System.out.println("***Senario4 : Ohh sleep was disturbed?");
 		}
-		System.out.println("***Senario4 : The threads should have been added by now with account ballances at £" + a.balance);
+		System.out.println("***Senario4 : The threads should have been added by now with account balance of  £" + a.balance);
 	}
 
-	//Withdraw from account with insufficient funds then add in funds later
+	//Withdraw from account and do nothing
 	public void Senario5() {
 		Bank b = new Bank();
 		Customer c1 = new Customer("ID1", "Geaorge McWashiton", "G114u");
@@ -149,7 +149,7 @@ public class Senario {
 		int accNum = b.openAccount(c1.getID(), Account.Type.SAVINGS, "Saving up for a teddy bear");
 		Account a = b.getAccount(accNum);
 		Thread t1 = new Thread(() -> a.withdraw(1000));
-		System.out.println("***Senario5 : Withdrawing from the bank account current value £" + a.balance);
+		System.out.println("***Senario5 : Withdrawing 1000 from the bank account current value £" + a.balance);
 		t1.start();
 	}
 
@@ -183,18 +183,18 @@ public class Senario {
 
 	public static void main(String[] args){
 		Senario s = new Senario();
-		System.out.println("!!!Start senario 1:");
-		s.Senario1();
-		System.out.println("!!!Start senario 2:");
-		s.Senario2();
-		System.out.println("!!!Start senario 3:");
-		s.Senario3();
-		System.out.println("!!!Start senario 4:");
-		s.Senario4();
+//		System.out.println("!!!Start senario 1:");
+//		s.Senario1();
+//		System.out.println("!!!Start senario 2:");
+//		s.Senario2();
+//		System.out.println("!!!Start senario 3:");
+//		s.Senario3();
+//		System.out.println("!!!Start senario 4:");
+//		s.Senario4();
 		System.out.println("!!!Start senario 5:");
 		s.Senario5();
-		System.out.println("!!!Start senario 6:");
-		s.Senario6();
+//		System.out.println("!!!Start senario 6:");
+//		s.Senario6();
 	}
 
 }

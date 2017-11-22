@@ -491,4 +491,9 @@ public class BankContinuityTest {
 
 		new Thread(()-> System.out.println("Removed owner :" + b.removeOwner("", -1))).start();
 	}
+
+
+
+
+
 }
