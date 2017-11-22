@@ -117,7 +117,11 @@ public class ThreadTracer {
 
             // Create entries for all remaining threadEntries in the list
             for (Thread thread : threadList) {
-                threadEntries.add(new ThreadEntry(thread));
+            	try {
+					threadEntries.add(new ThreadEntry(thread));
+				} catch (Exception e){
+					System.out.println(thread.getName());
+				}
             }
         }
     }
@@ -163,7 +167,7 @@ public class ThreadTracer {
     public boolean terminateThread(long PID){
         for(Thread thread: threads){
             if(thread.getId() == PID){
-                try {thread.stop();} catch (Exception e) {}
+                try {thread.interrupt();} catch (Exception e) {}
                 return true;
             }
         }

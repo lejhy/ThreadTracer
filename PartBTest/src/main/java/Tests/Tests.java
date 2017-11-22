@@ -35,13 +35,12 @@ public class Tests {
 		System.out.println("Done!");
 	}
 
-	private static void loop(){
-		while (true) {
-			try {
+	private static void loop() {
+		try {
+			while (true) {
 				Thread.sleep(1000);
-			} catch (Exception e) {
-				int x = 0;
 			}
+		} catch (Exception e) {
 		}
 	}
 }
