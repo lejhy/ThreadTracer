@@ -197,7 +197,13 @@ public class ThreadTracer {
 
     public void createNewThread() {
 
-        Thread newThread = new Thread(() -> {while(true){}});
+        Thread newThread = new Thread(() -> {
+        	try{
+        		while(true){
+        			Thread.sleep(1000);
+        		}
+        	}  catch(Exception e){}
+        });
         newThread.setDaemon(true);
         newThread.setName("Custom thread " + newThreadID);
         newThread.start();
